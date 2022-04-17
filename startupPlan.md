@@ -77,8 +77,8 @@ Lista undeva in cod cu nume de materii
 
 - [ ] asign prof to grupa
     random din lista de grupe se asigneaza random o materie
-
-
+ s  
+ 
 - [ ] la mark note la prof
     - [ ] mark(student, materie, nota)
         - [ ] verificare ca proful preda studentului
