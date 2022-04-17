@@ -64,14 +64,14 @@ Catalog
 
 Lista undeva in cod cu nume de materii
 
-- [ ] Create group
+- [x] Create group
    - [ ]  enter number of students:
         30
     for loop 0 30 face 30 de studenti
     
-- [ ]  Create materii
+- [x]  Create materii
 
-- [ ] Create profs
+- [x] Create profs
     - [ ] number of profs
         la fiecare prof creat se asigneaza o materie random
 
