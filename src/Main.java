@@ -1,6 +1,6 @@
-import Extras.Generator;
-import Platform.Course;
-import Platform.Group;
+import Extras.*;
+import Client.*;
+import Platform.*;
 
 public class Main {
 
@@ -13,6 +13,7 @@ public class Main {
         System.out.println(group);
         System.out.println(course);
 
+        System.out.println(Util.arrayListToString(group.getStudentsList()));
 
 
 

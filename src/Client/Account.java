@@ -16,11 +16,11 @@ public abstract class Account implements NamableForNow {
     // constructors
 
     public Account() throws Exception {
-        this(null, Gender.Unkown , null);
+        this(null, Gender.Unknown, null);
     }
 
     public Account(String name, String dateOfBirth) throws Exception {
-        this(name, Gender.Unkown, dateOfBirth);
+        this(name, Gender.Unknown, dateOfBirth);
     }
 
     public Account(String name, Gender gender, String dateOfBirth) throws Exception {
@@ -31,7 +31,7 @@ public abstract class Account implements NamableForNow {
 
     public Account(String name, String gender, String dateOfBirth) throws Exception {
         this.name = name;
-        this.gender = Util.genderValidation(gender);
+        this.gender = Util.genderStringValidation(gender);
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
     }
 
@@ -42,7 +42,7 @@ public abstract class Account implements NamableForNow {
     }
 
     public void setGender(String gender) throws Exception {
-        this.gender = Util.genderValidation(gender);
+        this.gender = Util.genderStringValidation(gender);
     }
 
     public void setDateOfBirth(String dateOfBirth) throws Exception {

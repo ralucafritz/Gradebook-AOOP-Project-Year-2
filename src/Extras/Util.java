@@ -28,7 +28,7 @@ public class Util extends Exception {
         return returnDate;
     }
 
-    public static Gender genderValidation(String gender) throws Exception {
+    public static Gender genderStringValidation(String gender) throws Exception {
         if (gender.equals("M") || gender.equals("F")) {
             if(gender.equals("M"))
                 return Gender.M;
@@ -42,7 +42,7 @@ public class Util extends Exception {
     public static <T extends NamableForNow> String arrayListToString(ArrayList<T> arrayList) {
         String toString = "";
         for (T item : arrayList) {
-            toString = toString + item.getName() + "\n";
+            toString = toString + "\t" + item.getName() + "\n";
         }
 
         return toString;
