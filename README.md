@@ -1,5 +1,5 @@
 Person
-    Professor
+    Client.Professor
     Assistent
-    Student
-Course
+    Client.Student
+Platform.Course

@@ -1,6 +1,12 @@
+package Platform;
+
+import Client.Student;
+import Extras.Util;
+import Interfaces.NamableForNow;
+
 import java.util.ArrayList;
 
-public class Group implements NamableForNow{
+public class Group implements NamableForNow {
     private int currentID;
     private ArrayList<Student> studentsList = new ArrayList<Student>();
     private ArrayList<Course> coursesList=  new ArrayList<Course>();

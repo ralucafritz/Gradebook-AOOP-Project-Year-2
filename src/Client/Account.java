@@ -1,3 +1,8 @@
+package Client;
+
+import Extras.*;
+import Interfaces.NamableForNow;
+
 import java.util.Calendar;
 
 public abstract class Account implements NamableForNow {
@@ -75,7 +80,7 @@ public abstract class Account implements NamableForNow {
 
     public void accountInfo() {
         System.out.println("Name: " + this.name + "\n" +
-                "Gender: " + this.gender + "\n" +
+                "Extras.Gender: " + this.gender + "\n" +
                 "Age: " + this.getAge());
     }
 

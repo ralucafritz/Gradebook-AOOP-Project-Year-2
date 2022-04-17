@@ -1,9 +1,14 @@
+package Client;
+
+import Extras.*;
+import Platform.Course;
+
 import java.util.ArrayList;
 
 public class Student extends Account{
 
-    private ArrayList<Course> courses =  new ArrayList<Course>();
-//    private Group group;
+    private ArrayList<Course> courses =  new ArrayList< Course>();
+//    private Platform.Group group;
 
     // constructors
 
@@ -24,7 +29,7 @@ public class Student extends Account{
     }
 // mutators
 //
-//    public void setGroup(Group group) {
+//    public void setGroup(Platform.Group group) {
 //        this.group = group;
 //    }
 
@@ -42,7 +47,7 @@ public class Student extends Account{
         return courses;
     }
 
-//    public Group getGroup() {
+//    public Platform.Group getGroup() {
 //        return group;
 //    }
 

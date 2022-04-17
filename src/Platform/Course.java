@@ -1,4 +1,9 @@
-public class Course implements NamableForNow{
+package Platform;
+
+import Client.Professor;
+import Interfaces.NamableForNow;
+
+public class Course implements NamableForNow {
     private String name;
     private int credits;
     private Professor professor;

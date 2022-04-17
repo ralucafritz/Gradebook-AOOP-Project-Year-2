@@ -1,3 +1,8 @@
+package Client;
+
+import Extras.*;
+import Platform.*;
+
 import java.util.ArrayList;
 
 public class Professor extends Account{

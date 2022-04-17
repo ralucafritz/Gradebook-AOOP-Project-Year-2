@@ -1,3 +1,9 @@
+package Extras;
+
+import Client.*;
+import Platform.*;
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;

@@ -1,3 +1,7 @@
+import Extras.Generator;
+import Platform.Course;
+import Platform.Group;
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
