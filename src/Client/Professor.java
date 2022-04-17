@@ -1,13 +1,15 @@
 package Client;
 
-import Extras.*;
-import Platform.*;
+import Extras.Gender;
+import Extras.Util;
+import Platform.Course;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Professor extends Account{
 
-    private ArrayList<Course> courses =  new ArrayList<Course>();
+    private Set<Course> courses =  new HashSet<>();
 
     // constructors
     public Professor() throws Exception {
@@ -40,7 +42,7 @@ public class Professor extends Account{
     // accessors
 
 
-    public ArrayList<Course> getCourses() {
+    public Set<Course> getCourses() {
         return courses;
     }
 
@@ -48,7 +50,16 @@ public class Professor extends Account{
 
     public void accountInfo(){
         super.accountInfo();
-        System.out.println("List teaching courses: \n \t " +  Util.arrayListToString(this.courses));
+        System.out.println("List teaching courses: \n" +  Util.setToString(this.courses));
 
+    }
+
+    public void mark(Student student, Course course, int grade) throws Exception {
+        if(this == course.getProfessor() && this.courses.contains(course))
+        {
+            student.setGrade(course, grade);
+        }
+        else
+            throw new Exception(this.getName() + " is not teaching this course" );
     }
 }

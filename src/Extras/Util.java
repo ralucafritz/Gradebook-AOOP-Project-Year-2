@@ -1,12 +1,11 @@
 package Extras;
 
 
-import Interfaces.NamableForNow;
-import Client.*;
-import Platform.*;
+import Interfaces.NameInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 public class Util extends Exception {
 
@@ -39,14 +38,27 @@ public class Util extends Exception {
         }
     }
 
-    public static <T extends NamableForNow> String arrayListToString(ArrayList<T> arrayList) {
+    public static <T extends NameInterface> String arrayListToString(ArrayList<T> arrayList) {
         String toString = "";
         for (T item : arrayList) {
-            toString = toString + "\t" + item.getName() + "\n";
+            toString += "\t" + item.getName() + "\n";
         }
 
         return toString;
     }
 
+    public static <T extends NameInterface> String setToString(Set<T> set) {
+        String toString = "";
+        for (T item : set) {
+            toString += "\t" + item.getName() + "\n";
+        }
+
+        return toString;
+    }
+
+    public static int getRandomNumber(int max, int min)
+    {
+        return (int) Math.floor(Math.random() * (max - min +1) + min);
+    }
 
 }

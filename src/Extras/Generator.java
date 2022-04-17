@@ -1,23 +1,21 @@
 package Extras;
 
-import Client.*;
-import Platform.*;
-
+import Client.Professor;
+import Client.Student;
+import Platform.Course;
+import Platform.Group;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Generator {
 
-    private static final String[] coursesNames = {"Advanced Algorithms","Advanced Object Orientated Programming",
+    private static final List<String> coursesNames = Arrays.asList("Advanced Algorithms","Advanced Object Orientated Programming",
             "Computer Networking", "Software Development Methods", "Foreign Languages", "Artificial Intelligence",
-            "Operating Systems", "Statistics and Probabilities", "Databases"};
+            "Operating Systems", "Statistics and Probabilities", "Databases");
 
     public static String nameGenerator() throws Exception {
         // the list of random names in names.txt are from
@@ -60,12 +58,13 @@ public class Generator {
         return (first + " " + last);
     }
 
-    public static String dateOfBirthGenerator(int studentOrProfessor) {
+    public static String dateOfBirthGenerator(boolean isStudent) {
         // to be technically correct we will choose a day between 1 and 27
-        int day = (int) Math.floor(Math.random() * 10 + 1);
-        int month = (int) Math.floor(Math.random() * 12 + 1);
+        int day =  Util.getRandomNumber(27,1);
+        int month = Util.getRandomNumber(12,1);
         int minAge;
-        if (studentOrProfessor == 0)
+
+        if (isStudent)
             minAge = 18;
         else
             minAge = 25;
@@ -73,15 +72,17 @@ public class Generator {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
         // from 1960 to current year - minAge ( which can be 18 or 25)
-        int year = (int) Math.floor(Math.random() * ((currentYear - minAge) - 1960 + 1) + 1960);
+        int year = Util.getRandomNumber(currentYear - minAge, 1960);
 
         String monthString, dayToString;
-        // transform to format DD
+
+        // transform to format 'DD'
         if (day < 10)
             dayToString = "0" + day;
         else
             dayToString = "" + day;
-        // transform to format MM
+
+        // transform to format 'MM'
         if (month < 10)
             monthString = "0" + month;
         else
@@ -91,30 +92,31 @@ public class Generator {
     }
 
     public static Student studentGenerator() throws Exception {
-        Gender gender = Gender.values()[new Random().nextInt(Gender.values().length)];
-        return new Student(nameGenerator(),gender, dateOfBirthGenerator(0));
+        return new Student(nameGenerator(),randomGenderGenerator(), dateOfBirthGenerator(true));
     }
 
     public static Professor professorGenerator() throws Exception {
-        Gender gender = Gender.values()[new Random().nextInt(Gender.values().length)];
-        return new Professor(nameGenerator(), gender, dateOfBirthGenerator(1));
+        return new Professor(nameGenerator(), randomGenderGenerator(), dateOfBirthGenerator(false));
     }
 
-    public static Group groupGenerator() throws Exception {
+    public static Gender randomGenderGenerator() {
+        return Gender.values()[new Random().nextInt(Gender.values().length - 1)];
+    }
+
+    public static Group groupGenerator(int numberStudents) throws Exception {
 
         ArrayList<Student> studentsList =  new ArrayList<Student>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < numberStudents; i++) {
             Student student = studentGenerator();
             studentsList.add(student);
         }
-
         return new Group(studentsList);
     }
 
     public static Course courseGenerator() throws Exception {
-        int randCredits = (int) Math.floor(Math.random() * 5 + 1);
-        int randIndex = (int) Math.floor(Math.random() * (coursesNames.length));
-        String name = coursesNames[randIndex];
+        int randCredits = Util.getRandomNumber(5,1);
+        int randIndex = Util.getRandomNumber(coursesNames.size() - 1, 0);
+        String name = coursesNames.get(randIndex);
         Professor professor = professorGenerator();
 
         return new Course(name, randCredits, professor);

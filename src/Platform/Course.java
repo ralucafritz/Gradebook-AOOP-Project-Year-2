@@ -1,9 +1,9 @@
 package Platform;
 
 import Client.Professor;
-import Interfaces.NamableForNow;
+import Interfaces.NameInterface;
 
-public class Course implements NamableForNow {
+public class Course implements NameInterface {
     private String name;
     private int credits;
     private Professor professor;
@@ -42,11 +42,11 @@ public class Course implements NamableForNow {
         return credits;
     }
 
+    public Professor getProfessor() {
+        return professor;
+    }
+
     // extra methods
 
-    @Override
-    public String toString() {
-        return "Course name: " + this.name + "\n" +
-                "Professor name: " + this.professor.getName();
-    }
+
 }
