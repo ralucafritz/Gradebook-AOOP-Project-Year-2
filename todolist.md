@@ -2,28 +2,28 @@ Catalog
 
 - [X]  student, profesor, grupe, course
 
-- [x] abstract Client.Account
+- [x] abstract Account
     - [x] name
     - [x]gender
     - [x]date of birth
 
 
-- [x] Client.Student extends Client.Account
-    - [x] List / Array / Colectie <Platform.Course>
-    - [x] Platform.Group
+- [x] tudent extends Account
+    - [x] List / Array / Colectie <Course>
+    - [x] Group
 
-- [x] Profesor extends Client.Account
-    - [x] List / Array / Colectie <Platform.Group>
-    - [x] List / Array / Colectie <Platform.Course>
-    - [ ] private method mark(Client.Student, Platform.Course, nota)
+- [x] Profesor extends Account
+    - [x] List / Array / Colectie <Group>
+    - [x] List / Array / Colectie <Course>
+    - [ ] private method mark(Student, Course, nota)
 
-- [x] Platform.Course
+- [x] Course
     - [x]  name
     - [x]  credits
 
-- [x] Platform.Group
+- [x] Group
     - [x]  name / identifier
-    - [x]  List / array / colectie <Client.Student>
+    - [x]  List / array / colectie <Student>
     - [x]  List / array / colectie <Profesor>
 
 - [x] static Utils
@@ -82,4 +82,5 @@ Lista undeva in cod cu nume de materii
 - [ ] la mark note la prof
     - [ ] mark(student, materie, nota)
         - [ ] verificare ca proful preda studentului
+
 
