@@ -23,8 +23,8 @@ public class Generator {
 
         int randFirst;
         int randLast;
-        String first = " ";
-        String last = " ";
+        String first = "";
+        String last = "";
         try {
             File namesFile = new File("names.txt");
             Scanner scanner = new Scanner(namesFile);

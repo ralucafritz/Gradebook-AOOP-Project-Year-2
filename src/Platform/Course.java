@@ -8,6 +8,7 @@ public class Course implements GetNameInterface {
     private String name;
 //    private int credits;   -> TO BE IMPLEMENTED IN THE NEAR FEATURE TO REACH A FINAL GRADE
     private Professor professor;
+    private boolean hasProfessor;
 
     // constructors
 

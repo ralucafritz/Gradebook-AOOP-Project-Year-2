@@ -180,6 +180,7 @@ public class Menu {
                 break;
             case 2:
                 System.out.println("Insert the name of the course you want to mark: ");
+                professor.printCourses();
                 String courseName = scanner.next();
                 for (Course course1 : professor.getCourses()) {
                     if (course1.getName().equalsIgnoreCase(courseName)) {
@@ -261,7 +262,7 @@ public class Menu {
                 }
                 addStudent((Student) account);
             } else {
-               addProfesor((Professor) account);
+               addProfessor((Professor) account);
             }
             return account;
         }
@@ -288,7 +289,7 @@ public class Menu {
 
             if (choice.equalsIgnoreCase("Y")) {
                 System.out.println("Insert the full name of the professor: ");
-                String profName = scanner.nextLine();
+                String profName = scanner.next();
                 for (Professor professor : professorsList)
                     if (professor.getName().equalsIgnoreCase(profName)) {
                         professorForCourse = professor;
@@ -303,7 +304,7 @@ public class Menu {
         System.out.println("Select the group that will be enrolled in this course: "); // for now it only works for one group at a time
         printGroupList();
         System.out.println("Insert the name of the group: ");
-        String groupName = scanner.nextLine();
+        String groupName = scanner.next();
         for(Group group1 : groupsList) {
             if(group1.getName().equalsIgnoreCase(groupName))
                 group1.addCourse(course);
@@ -314,7 +315,7 @@ public class Menu {
 
     ////// add existing
 //
-    private void addProfesor(Professor professor) {
+    private void addProfessor(Professor professor) {
         if (!professorsList.contains(professor))
             this.professorsList.add(professor);
     }
@@ -335,26 +336,26 @@ public class Menu {
     }
 //
 //    ////// remove
-    private void removeProfesor(Professor professor) {
-        if (professorsList.contains(professor))
-            this.professorsList.remove(professor);
-
-    }
-
-    private void removeStudent(Student student) {
-        if (studentsList.contains(student))
-            this.studentsList.remove(student);
-    }
-
-    private void removeGroup(Group group) {
-        if (groupsList.contains(group))
-            this.groupsList.remove(group);
-    }
-
-    private void removeCourse(Course course) {
-        if (coursesList.contains(course))
-            this.coursesList.remove(course);
-    }
+//    private void removeProfesor(Professor professor) {
+//        if (professorsList.contains(professor))
+//            this.professorsList.remove(professor);
+//
+//    }
+//
+//    private void removeStudent(Student student) {
+//        if (studentsList.contains(student))
+//            this.studentsList.remove(student);
+//    }
+//
+//    private void removeGroup(Group group) {
+//        if (groupsList.contains(group))
+//            this.groupsList.remove(group);
+//    }
+//
+//    private void removeCourse(Course course) {
+//        if (coursesList.contains(course))
+//            this.coursesList.remove(course);
+//    }
 
     // getters and setters
     private ArrayList<Student> getStudentsList() {

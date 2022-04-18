@@ -106,7 +106,7 @@ public class Student extends Account {
             else
                 coursesAndGradesStr.append("\n \t ").append(course.getName()).append(": ").append("NOT GRADED");
         }
-        System.out.println(coursesAndGradesStr.toString());
+        System.out.println(coursesAndGradesStr);
     }
 
 }
