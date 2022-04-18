@@ -1,20 +1,27 @@
 package Platform;
 
 import Client.Professor;
-import Interfaces.NameInterface;
+import Extras.Generator;
+import Interfaces.GetNameInterface;
 
-public class Course implements NameInterface {
+public class Course implements GetNameInterface {
     private String name;
-    private int credits;
+//    private int credits;   -> TO BE IMPLEMENTED IN THE NEAR FEATURE TO REACH A FINAL GRADE
     private Professor professor;
 
     // constructors
 
-    public Course(String name, int credits, Professor professor) {
+    public Course(String name) throws Exception {
         this.name = name;
-        this.credits = credits;
+        this.professor = Generator.professorGenerator();
+        this.professor.addCourse(this);
+    }
+
+    public Course(String name, Professor professor) {
+        this.name = name;
+//        this.credits = credits;
         this.professor = professor;
-        professor.addCourse(this);
+        this.professor.addCourse(this);
     }
 
     // mutators
@@ -23,9 +30,9 @@ public class Course implements NameInterface {
         this.name = name;
     }
 
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
+//    public void setCredits(int credits) {
+//        this.credits = credits;
+//    }
 
     public void changeProfessor(Professor professorToBeSelected) {
         this.professor = professorToBeSelected;
@@ -38,9 +45,9 @@ public class Course implements NameInterface {
         return name;
     }
 
-    public int getCredits() {
-        return credits;
-    }
+//    public int getCredits() {
+//        return credits;
+//    }
 
     public Professor getProfessor() {
         return professor;

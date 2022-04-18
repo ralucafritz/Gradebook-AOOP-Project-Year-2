@@ -1,7 +1,7 @@
 package Extras;
 
 
-import Interfaces.NameInterface;
+import Interfaces.GetNameInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,22 +38,22 @@ public class Util extends Exception {
         }
     }
 
-    public static <T extends NameInterface> String arrayListToString(ArrayList<T> arrayList) {
-        String toString = "";
+    public static <T extends GetNameInterface> StringBuilder arrayListToString(ArrayList<T> arrayList) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (T item : arrayList) {
-            toString += "\t" + item.getName() + "\n";
+            stringBuilder.append("\t").append(item.getName()).append("\n");
         }
 
-        return toString;
+        return stringBuilder;
     }
 
-    public static <T extends NameInterface> String setToString(Set<T> set) {
-        String toString = "";
+    public static <T extends GetNameInterface> StringBuilder setToString(Set<T> set) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (T item : set) {
-            toString += "\t" + item.getName() + "\n";
+            stringBuilder.append("\t").append(item.getName()).append("\n");
         }
 
-        return toString;
+        return stringBuilder;
     }
 
     public static int getRandomNumber(int max, int min)

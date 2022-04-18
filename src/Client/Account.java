@@ -1,11 +1,12 @@
 package Client;
 
 import Extras.*;
-import Interfaces.NameInterface;
+import Interfaces.GetNameInterface;
+import Interfaces.SetAccountInterface;
 
 import java.util.Calendar;
 
-public abstract class Account implements NameInterface {
+public abstract class Account implements GetNameInterface, SetAccountInterface {
 
     // instances fields
 
@@ -16,7 +17,7 @@ public abstract class Account implements NameInterface {
     // constructors
 
     public Account() throws Exception {
-        this(null, Gender.Unknown, null);
+        this(null, Gender.Unknown, "01-01-1960");
     }
 
     public Account(String name, String dateOfBirth) throws Exception {

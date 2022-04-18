@@ -62,11 +62,15 @@ public class Student extends Account {
 
     }
 
-
     // accessors
 
     public Set<Course> getCourses() {
         return courses.keySet();
+    }
+
+
+    public Map<Course, Integer> getCoursesList() {
+        return courses;
     }
 
     public String getCourseName(Course course) {
@@ -86,16 +90,23 @@ public class Student extends Account {
     public void accountInfo() {
         super.accountInfo();
 //        System.out.println("Group: " + this.group.getName() + "\n" +
+        this.printCourses();
+    }
+
+    public void printCourses(){
         System.out.println("List enlisted courses: \n" + Util.setToString(this.courses.keySet()));
     }
 
-    public String coursesAndGrades() {
+    public void coursesAndGrades() {
         StringBuilder coursesAndGradesStr = new StringBuilder();
         coursesAndGradesStr.append("List of courses and grades: ");
-        for(Course course : courses.keySet()) {
-            coursesAndGradesStr.append("\n \t ").append(course.getName()).append(": ").append(courses.get(course));
+        for(Course course : this.courses.keySet()) {
+            if (this.courses.get(course) != 0)
+                coursesAndGradesStr.append("\n \t ").append(course.getName()).append(": ").append(this.courses.get(course));
+            else
+                coursesAndGradesStr.append("\n \t ").append(course.getName()).append(": ").append("NOT GRADED");
         }
-        return coursesAndGradesStr.toString();
+        System.out.println(coursesAndGradesStr.toString());
     }
 
 }

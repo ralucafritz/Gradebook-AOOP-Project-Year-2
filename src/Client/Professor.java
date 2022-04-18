@@ -50,8 +50,11 @@ public class Professor extends Account{
 
     public void accountInfo(){
         super.accountInfo();
-        System.out.println("List teaching courses: \n" +  Util.setToString(this.courses));
+        printCourses();
+    }
 
+    public void printCourses() {
+        System.out.println("List teaching courses: \n" +  Util.setToString(this.courses));
     }
 
     public void mark(Student student, Course course, int grade) throws Exception {

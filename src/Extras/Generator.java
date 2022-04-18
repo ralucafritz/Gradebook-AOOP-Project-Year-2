@@ -119,7 +119,7 @@ public class Generator {
         String name = coursesNames.get(randIndex);
         Professor professor = professorGenerator();
 
-        return new Course(name, randCredits, professor);
+        return new Course(name, professor);
     }
 
 }

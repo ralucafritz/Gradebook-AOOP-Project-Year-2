@@ -51,17 +51,16 @@ Catalog
     - [ ] fisier pentru grupe
     - [ ] fisier pentru materii -->
 
-- [ ] class Meniu
+- [x] class Meniu
     - [ ] init data =  initializeze datele de inceput 
-    - [ ] method option()
-    - [ ] method print options() // le ia pe toate de mai sus
-
-
-- [ ] main function
-    - [ ] initializeze datele de inceput random din functiile din Extras.Util
-     - [ ]  sa printeze un meniu
-        - [ ] selectezi un user
-            - [ ] student
+    - [x] method option()
+    - [x] method print options() // le ia pe toate de mai sus
+SCRISE DAR TREBUIE DEBUGGING:
+- [ ] main function => tot in menu class
+    - [x] initializeze datele de inceput random din functiile din Extras.Util // sa se creeze -> am trecut pe creat acum
+     - [x]  sa printeze un meniu
+        - [x] selectezi un user
+            - [x] student
                 - [ ] print materii si note
                 - [ ] print grupa si colegi
                 - [ ] "am picat la X?"

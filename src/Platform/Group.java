@@ -3,14 +3,14 @@ package Platform;
 import Client.Professor;
 import Client.Student;
 import Extras.Util;
-import Interfaces.NameInterface;
+import Interfaces.GetNameInterface;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Group implements NameInterface {
+public class Group implements GetNameInterface {
     private int currentID;
     private ArrayList<Student> studentsList = new ArrayList<Student>();
     private ArrayList<Professor> professorsList = new ArrayList<Professor>();
@@ -33,27 +33,43 @@ public class Group implements NameInterface {
     // mutators
 
     public void addCourse(Course courseToBeAdded) throws Exception {
-        this.coursesList.add(courseToBeAdded);
-        this.professorsList.add(courseToBeAdded.getProfessor());
-        for(Student student : studentsList){
-            student.addCourse(courseToBeAdded);
+        if(!coursesList.contains(courseToBeAdded)) {
+            this.coursesList.add(courseToBeAdded);
+            this.professorsList.add(courseToBeAdded.getProfessor());
+            for(Student student : studentsList){
+                student.addCourse(courseToBeAdded);
+            }
         }
+        else {
+            throw new Exception("This group is already enrolled in that course.");
+        }
+
+
     }
 
-    public void removeCourse(Course courseToBeRemoved) {
-        this.coursesList.remove(courseToBeRemoved);
-        this.coursesList.remove(courseToBeRemoved.getProfessor());
-        for(Student student: studentsList) {
-            student.removeCourse(courseToBeRemoved);
+    public void removeCourse(Course courseToBeRemoved) throws Exception {
+        if(coursesList.contains(courseToBeRemoved)) {
+            this.coursesList.remove(courseToBeRemoved);
+            this.coursesList.remove(courseToBeRemoved.getProfessor());
+            for (Student student : studentsList) {
+                student.removeCourse(courseToBeRemoved);
+            }
+        }
+        else {
+            throw new Exception("This group is not enrolled in that course.");
         }
     }
 
     public void addStudent(Student studentToBeAdded) {
-        this.studentsList.add(studentToBeAdded);
+        if(!studentsList.contains(studentToBeAdded)) {
+            this.studentsList.add(studentToBeAdded);
+        }
     }
 
     public void removeStudent(Student studentToBeRemoved) {
-        this.studentsList.remove(studentToBeRemoved);
+        if(studentsList.contains(studentToBeRemoved)) {
+            this.studentsList.remove(studentToBeRemoved);
+        }
     }
 
     // accessors
@@ -77,7 +93,13 @@ public class Group implements NameInterface {
     // extra methods:
 
     public void printStudentsList() {
+        this.sortStudentsByName();
         System.out.println(Util.arrayListToString(this.studentsList));
+    }
+
+    public void printProfessorList() {
+        this.sortProfessorsByName();
+        System.out.println(Util.arrayListToString(this.professorsList));
     }
 
     public void printCoursesList() {
