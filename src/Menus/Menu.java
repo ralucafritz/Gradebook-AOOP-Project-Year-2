@@ -11,16 +11,16 @@ import java.util.*;
 
 public class Menu {
 
-    private ArrayList<Student> studentsList = new ArrayList<Student>();
-    private ArrayList<Professor> professorsList = new ArrayList<Professor>();
-    private Set<Course> coursesList = new HashSet<>();
-    private ArrayList<Group> groupsList = new ArrayList<Group>();
+    private ArrayList<Student> studentsList;
+    private ArrayList<Professor> professorsList;
+    private Set<Course> coursesList;
+    private ArrayList<Group> groupsList;
 
     // constructor
     public Menu() {
-        this.studentsList = new ArrayList<Student>();
-        this.groupsList = new ArrayList<Group>();
-        this.professorsList = new ArrayList<Professor>();
+        this.studentsList = new ArrayList<>();
+        this.groupsList = new ArrayList<>();
+        this.professorsList = new ArrayList<>();
         this.coursesList = new HashSet<>();
     }
 
@@ -63,7 +63,7 @@ public class Menu {
                     System.out.println("Insert student name: ");
                     String studentName = scanner.next();
                     for (Student student1 : studentsList) {
-                        if (student1.getName().toLowerCase().equals(studentName.toLowerCase())) {
+                        if (student1.getName().equalsIgnoreCase(studentName)) {
                             printStudentMenuOptions(student1);
                         }
                     }
@@ -76,7 +76,7 @@ public class Menu {
                     System.out.println("Insert professor name: ");
                     String professorName = scanner.next();
                     for (Professor professor1 : professorsList) {
-                        if (professor1.getName().toLowerCase().equals(professorName.toLowerCase())) {
+                        if (professor1.getName().equalsIgnoreCase(professorName)) {
                             printProfessorMenuOptions(professor1);
                         }
                     }
@@ -121,29 +121,29 @@ public class Menu {
                  student.coursesAndGrades();
                  break;
              case 3:
-                 for (Group group : groupsList) {
-                     if (group.getStudentsList().contains(student))
-                         System.out.println(group.getName());
+                 for (Group group1 : this.getGroupsList()) {
+                     if (group1.getStudentsList().contains(student))
+                         System.out.println(group1.getName());
                  }
                  break;
              case 4:
-                 for (Group group : groupsList) {
-                     if (group.getStudentsList().contains(student))
-                         group.printStudentsList();
+                 for (Group group1 : this.getGroupsList()) {
+                     if (group1.getStudentsList().contains(student))
+                         group1.printStudentsList();
                  }
                  break;
              case 5:
-                 StringBuilder failedClases = new StringBuilder();
-                 for (Course course : student.getCourses()) {
-                     int grade = student.getCoursesList().get(course);
+                 StringBuilder failedCourses = new StringBuilder();
+                 for (Course course1 : student.getCourses()) {
+                     int grade = student.getCoursesList().get(course1);
                      if (grade < 5 && grade != 0) {
-                         failedClases.append("\t" + course.getName() + ": " + grade + "\n");
+                         failedCourses.append("\t").append(course1.getName().toUpperCase()).append(": ").append(grade).append("\n");
                      }
                  }
-                 if (failedClases.length() != 0) {
-                     System.out.println(failedClases);
+                 if (failedCourses.length() != 0) {
+                     System.out.println(failedCourses);
                  } else
-                     System.out.println("No failed classes. Good job!");
+                     System.out.println("No failed classes yet, good job!");
                  break;
              case 6:
                  check = false;
@@ -181,13 +181,13 @@ public class Menu {
             case 2:
                 System.out.println("Insert the name of the course you want to mark: ");
                 String courseName = scanner.next();
-                for (Course course : professor.getCourses()) {
-                    if (course.getName().equals(courseName)) {
-                        for (Student student : this.getStudentsList()) {
-                            if (student.getCourses().contains(course)) {
-                                System.out.println("Insert the grade for " + student.getName() + ": ");
+                for (Course course1 : professor.getCourses()) {
+                    if (course1.getName().equalsIgnoreCase(courseName)) {
+                        for (Student student1 : this.getStudentsList()) {
+                            if (student1.getCourses().contains(course1)) {
+                                System.out.println("Insert the grade for " + student1.getName() + ": ");
                                 int grade = scanner.nextInt();
-                                professor.mark(student, course, grade);
+                                professor.mark(student1, course1, grade);
                             }
                         }
                     }
@@ -196,10 +196,10 @@ public class Menu {
             case 3:
                 StringBuilder stringToPrint = new StringBuilder();
                 for (Course course : professor.getCourses()) {
-                    stringToPrint.append("Groups that are enrolled in " + course.getName() + "\n");
-                    for (Group group : groupsList) {
+                    stringToPrint.append("Groups that are enrolled in ").append(course.getName()).append("\n");
+                    for (Group group : this.getGroupsList()) {
                         if (group.getCoursesList().contains(course)) {
-                            stringToPrint.append("\t" + group.getName() + "\n");
+                            stringToPrint.append("\t").append(group.getName()).append("\n");
                         }
                     }
                 }
@@ -256,48 +256,46 @@ public class Menu {
                 System.out.println("Insert group name: ");
                 String groupName = scanner.nextLine();
                 for (Group group1 : groupsList){
-                    if(group1.getName().toLowerCase().equals(groupName))
+                    if(group1.getName().equalsIgnoreCase(groupName))
                         group1.addStudent((Student) account);
                 }
-                this.studentsList.add((Student) account);
+                addStudent((Student) account);
             } else {
-                this.professorsList.add((Professor) account);
+               addProfesor((Professor) account);
             }
             return account;
         }
     }
 
     // GROUP
-    private Group createGroup() {
+    private void createGroup() {
         Group group = new Group();
-        this.groupsList.add(group);
-        return group;
+        addGroup(group);
     }
 
     // COURSE
-    private Course createCourse() throws Exception {
+    private void createCourse() throws Exception {
         System.out.println("Insert the name: ");
         Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
+        String name = scanner.next().toUpperCase();
 
         Professor professorForCourse = new Professor();
         if (professorsList.size() != 0) {
             System.out.println("Is the professor for this course already in the system? \n");
             printProfessorList();
             System.out.println("Y/N");
-            String choice = scanner.nextLine();
+            String choice = scanner.next();
 
-            if (choice.toUpperCase().equals("Y")) {
+            if (choice.equalsIgnoreCase("Y")) {
                 System.out.println("Insert the full name of the professor: ");
                 String profName = scanner.nextLine();
                 for (Professor professor : professorsList)
-                    if (professor.getName().toLowerCase().equals(profName.toLowerCase())) {
+                    if (professor.getName().equalsIgnoreCase(profName)) {
                         professorForCourse = professor;
                     }
             } else {
                 professorForCourse = this.createStudentOrProfessor(professorForCourse, false);
             }
-
         } else {
             professorForCourse = this.createStudentOrProfessor(professorForCourse, false);
         }
@@ -307,90 +305,91 @@ public class Menu {
         System.out.println("Insert the name of the group: ");
         String groupName = scanner.nextLine();
         for(Group group1 : groupsList) {
-            if(group1.getName().toLowerCase().equals(groupName.toLowerCase()))
+            if(group1.getName().equalsIgnoreCase(groupName))
                 group1.addCourse(course);
         }
 
-        coursesList.add(course);
-        return course;
+        addCourse(course);
     }
 
     ////// add existing
 //
-//    private void addProfesor(Professor professor) {
-//        if (!professorsList.contains(professor))
-//            this.professorsList.add(professor);
-//    }
-//
-//    private void addStudent(Student student) {
-//        if (!studentsList.contains(student))
-//            this.studentsList.add(student);
-//    }
-//
-//    private void addGroup(Group group) {
-//        if (!groupsList.contains(group))
-//            this.groupsList.add(group);
-//    }
-//
-//    private void addCourse(Course course) {
-//        if (!coursesList.contains(course))
-//            this.coursesList.add(course);
-//    }
+    private void addProfesor(Professor professor) {
+        if (!professorsList.contains(professor))
+            this.professorsList.add(professor);
+    }
+
+    private void addStudent(Student student) {
+        if (!studentsList.contains(student))
+            this.studentsList.add(student);
+    }
+
+    private void addGroup(Group group) {
+        if (!groupsList.contains(group))
+            this.groupsList.add(group);
+    }
+
+    private void addCourse(Course course) {
+        if (!coursesList.contains(course))
+            this.coursesList.add(course);
+    }
 //
 //    ////// remove
-//    private void removeProfesor(Professor professor) {
-//        if (professorsList.contains(professor))
-//            this.professorsList.remove(professor);
-//
-//    }
-//
-//    private void removeStudent(Student student) {
-//        if (studentsList.contains(student))
-//            this.studentsList.remove(student);
-//    }
-//
-//    private void removeGroup(Group group) {
-//        if (groupsList.contains(group))
-//            this.groupsList.remove(group);
-//    }
-//
-//    private void removeCourse(Course course) {
-//        if (coursesList.contains(course))
-//            this.coursesList.remove(course);
-//    }
+    private void removeProfesor(Professor professor) {
+        if (professorsList.contains(professor))
+            this.professorsList.remove(professor);
+
+    }
+
+    private void removeStudent(Student student) {
+        if (studentsList.contains(student))
+            this.studentsList.remove(student);
+    }
+
+    private void removeGroup(Group group) {
+        if (groupsList.contains(group))
+            this.groupsList.remove(group);
+    }
+
+    private void removeCourse(Course course) {
+        if (coursesList.contains(course))
+            this.coursesList.remove(course);
+    }
 
     // getters and setters
     private ArrayList<Student> getStudentsList() {
         return studentsList;
     }
 
-    private void setStudentsList(ArrayList<Student> studentsList) {
-        this.studentsList = studentsList;
-    }
 
     private ArrayList<Professor> getProfessorsList() {
         return professorsList;
-    }
-
-    private void setProfessorsList(ArrayList<Professor> professorsList) {
-        this.professorsList = professorsList;
     }
 
     private Set<Course> getCoursesList() {
         return coursesList;
     }
 
-    private void setCoursesList(Set<Course> coursesList) {
-        this.coursesList = coursesList;
-    }
-
     private ArrayList<Group> getGroupsList() {
         return groupsList;
     }
+//    SETTERS
 
-    private void setGroupsList(ArrayList<Group> groupsList) {
-        this.groupsList = groupsList;
-    }
+//    private void setStudentsList(ArrayList<Student> studentsList) {
+//        this.studentsList = studentsList;
+//    }
+//
+//    private void setProfessorsList(ArrayList<Professor> professorsList) {
+//        this.professorsList = professorsList;
+//    }
+//
+//    private void setCoursesList(Set<Course> coursesList) {
+//        this.coursesList = coursesList;
+//    }
+//
+//    private void setGroupsList(ArrayList<Group> groupsList) {
+//        this.groupsList = groupsList;
+//    }
 
     // PRINTS
     private void printProfessorList() {
