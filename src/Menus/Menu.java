@@ -60,7 +60,7 @@ public class Menu {
                 if(studentsList.size() != 0) {
                     System.out.println("Select student: ");
                     this.printStudentList();
-                    System.out.println("Insert student name: ");
+                    System.out.println("Insert student name: (use 1 name only - 2 names-> bug)");
                     String studentName = scanner.next();
                     for (Student student1 : studentsList) {
                         if (student1.getName().equalsIgnoreCase(studentName)) {
@@ -73,7 +73,7 @@ public class Menu {
                 if(professorsList.size() != 0) {
                     System.out.println("Select professor: ");
                     this.printProfessorList();
-                    System.out.println("Insert professor name: ");
+                    System.out.println("Insert professor name: (use 1 name only - 2 names-> bug)");
                     String professorName = scanner.next();
                     for (Professor professor1 : professorsList) {
                         if (professor1.getName().equalsIgnoreCase(professorName)) {
