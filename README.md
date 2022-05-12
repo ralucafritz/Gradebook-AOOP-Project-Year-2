@@ -2,5 +2,5 @@
 
 ---
 
-# Online Grade Book Platform
+# Grade Book Platform - Console
 
