@@ -41,6 +41,7 @@ public class Menu {
     public void menuOptions() throws Exception {
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
+        scanner.nextLine();
         switch (choice) {
             case 1:
                 createGroup();
@@ -61,7 +62,7 @@ public class Menu {
                     System.out.println("Select student: ");
                     this.printStudentList();
                     System.out.println("Insert student name: (use 1 name only - 2 names-> bug)");
-                    String studentName = scanner.next();
+                    String studentName = scanner.nextLine();
                     for (Student student1 : studentsList) {
                         if (student1.getName().equalsIgnoreCase(studentName)) {
                             printStudentMenuOptions(student1);
@@ -74,7 +75,7 @@ public class Menu {
                     System.out.println("Select professor: ");
                     this.printProfessorList();
                     System.out.println("Insert professor name: (use 1 name only - 2 names-> bug)");
-                    String professorName = scanner.next();
+                    String professorName = scanner.nextLine();
                     for (Professor professor1 : professorsList) {
                         if (professor1.getName().equalsIgnoreCase(professorName)) {
                             printProfessorMenuOptions(professor1);
@@ -85,6 +86,7 @@ public class Menu {
                     System.out.println("No professors found in the system.");
                 break;
             case 7:
+                System.out.println("See you soon!");
                 System.exit(0);
                 break;
             default:
@@ -112,6 +114,7 @@ public class Menu {
     private void studentMenuOptions(Student student) throws Exception {
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
+        scanner.nextLine();
         boolean check = true;
         switch (choice) {
              case 1:
@@ -173,6 +176,7 @@ public class Menu {
     private void professorMenuOptions(Professor professor) throws Exception {
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
+        scanner.nextLine();
         boolean check = true;
         switch (choice) {
             case 1:
@@ -181,13 +185,14 @@ public class Menu {
             case 2:
                 System.out.println("Insert the name of the course you want to mark: ");
                 professor.printCourses();
-                String courseName = scanner.next();
+                String courseName = scanner.nextLine();
                 for (Course course1 : professor.getCourses()) {
                     if (course1.getName().equalsIgnoreCase(courseName)) {
                         for (Student student1 : this.getStudentsList()) {
                             if (student1.getCourses().contains(course1)) {
                                 System.out.println("Insert the grade for " + student1.getName() + ": ");
                                 int grade = scanner.nextInt();
+                                scanner.nextLine();
                                 professor.mark(student1, course1, grade);
                             }
                         }
@@ -220,7 +225,7 @@ public class Menu {
 
     }
 
-//      FUTURE IMPLEMENTATION
+//      FUTURE IMPLEMENTATION - MAYBE
 //    public void printCourseMenuOptions() {
 //        System.out.println("Welcome to the Course Menu! \n" +
 //                "You have the following options:\n" +
@@ -278,18 +283,18 @@ public class Menu {
     private void createCourse() throws Exception {
         System.out.println("Insert the name: ");
         Scanner scanner = new Scanner(System.in);
-        String name = scanner.next().toUpperCase();
+        String name = scanner.nextLine().toUpperCase();
 
         Professor professorForCourse = new Professor();
         if (professorsList.size() != 0) {
             System.out.println("Is the professor for this course already in the system? \n");
             printProfessorList();
             System.out.println("Y/N");
-            String choice = scanner.next();
+            String choice = scanner.nextLine();
 
             if (choice.equalsIgnoreCase("Y")) {
                 System.out.println("Insert the full name of the professor: ");
-                String profName = scanner.next();
+                String profName = scanner.nextLine();
                 for (Professor professor : professorsList)
                     if (professor.getName().equalsIgnoreCase(profName)) {
                         professorForCourse = professor;
@@ -304,7 +309,7 @@ public class Menu {
         System.out.println("Select the group that will be enrolled in this course: "); // for now it only works for one group at a time
         printGroupList();
         System.out.println("Insert the name of the group: ");
-        String groupName = scanner.next();
+        String groupName = scanner.nextLine();
         for(Group group1 : groupsList) {
             if(group1.getName().equalsIgnoreCase(groupName))
                 group1.addCourse(course);
