@@ -1,6 +1,6 @@
 package Interfaces;
 
-// didn't know what name to use for now
+// INTERFACE USED FOR THE PRINT OF ARRAYLISTS AND SETS
 public interface GetNameInterface {
 
     public String getName();

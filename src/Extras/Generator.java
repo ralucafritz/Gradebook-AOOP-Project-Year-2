@@ -13,9 +13,17 @@ import java.util.*;
 
 public class Generator {
 
+    // this class was created for testing purposes in the initial phase when I needed to test different methods and
+    // menu options.
+    // at the moment nothing is used from this class.
+
+
     private static final List<String> coursesNames = Arrays.asList("Advanced Algorithms","Advanced Object Orientated Programming",
             "Computer Networking", "Software Development Methods", "Foreign Languages", "Artificial Intelligence",
             "Operating Systems", "Statistics and Probabilities", "Databases");
+
+    // name generator from `names.txt` file that takes 2 random names from the file to create a realistic first and
+    // last name
 
     public static String nameGenerator() throws Exception {
         // the list of random names in names.txt are from
@@ -32,22 +40,41 @@ public class Generator {
             Path path = namesFile.toPath();
             long fileLen = Files.lines(path).count();
 
+            // creating 2 random numbers for the first and last name
             randFirst = (int) (Math.random() * fileLen);
             randLast = (int) (Math.random() * fileLen);
 
+            // testing to see if randFrist is identical to randLast and if the randLast is greater than 0 so that
+            // we change the randLast number in order for the first and the last name to never be identical.
             if (randFirst == randLast && randLast > 0)
                 randLast--;
             else
                 randLast++;
 
+            // scan through the first randFirst-1 numbers and read the randFirst number name
             for (int i = 0; i <= randFirst - 1; i++)
-                first = scanner.nextLine();
+                if(i != randFirst)
+                {
+                    scanner.nextLine();
+                }
+                else
+                {
+                    first = scanner.nextLine();
+                }
 
             // resetting scanner to the beginning of the file
             scanner = new Scanner(namesFile);
 
+            // scan through the first randLast-1 numbers and read the randLast number name
             for (int i = 0; i <= randLast - 1; i++)
-                last = scanner.nextLine();
+                if(i != randLast)
+                {
+                    scanner.nextLine();
+                }
+                else
+                {
+                    last = scanner.nextLine();
+                }
 
             scanner.close();
 

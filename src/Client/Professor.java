@@ -41,7 +41,6 @@ public class Professor extends Account{
 
     // accessors
 
-
     public Set<Course> getCourses() {
         return courses;
     }
