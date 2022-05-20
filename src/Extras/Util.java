@@ -48,9 +48,13 @@ public class Util extends Exception {
     // template method that creates a string from an arraylist and it results in a list of names
     public static <T extends GetNameInterface> StringBuilder arrayListToString(ArrayList<T> arrayList) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (T item : arrayList) {
-            stringBuilder.append("\t").append(item.getName()).append("\n");
-        }
+
+        arrayList.forEach( (item) -> {
+            stringBuilder
+                    .append("\t")
+                    .append(item.getName())
+                    .append("\n");
+        });
 
         return stringBuilder;
     }
@@ -58,9 +62,13 @@ public class Util extends Exception {
     // template method that creates a string from an set and it results in a list of names
     public static <T extends GetNameInterface> StringBuilder setToString(Set<T> set) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (T item : set) {
-            stringBuilder.append("\t").append(item.getName()).append("\n");
-        }
+
+        set.forEach( (item) -> {
+            stringBuilder
+                    .append("\t")
+                    .append(item.getName())
+                    .append("\n");
+        });
 
         return stringBuilder;
     }

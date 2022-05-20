@@ -1,4 +1,4 @@
-import Menus.Menu;
+import Services.Menu;
 
 public class Main {
 

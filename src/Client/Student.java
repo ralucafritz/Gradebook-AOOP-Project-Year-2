@@ -17,7 +17,7 @@ public class Student extends Account {
     // constructors
 
     public Student() throws Exception {
-       super();
+        super();
     }
 
     public Student(String name, String dateOfBirth) throws Exception {
@@ -37,12 +37,10 @@ public class Student extends Account {
 //        this.group = group;
 //    }
 
-    public void addCourse(Course course) throws Exception{
-        if (!this.courses.containsKey(course) && !getCourseName(course).equals(course.getName()))
-        {
+    public void addCourse(Course course) throws Exception {
+        if (!this.courses.containsKey(course) && !getCourseName(course).equals(course.getName())) {
             this.courses.put(course, 0);
-        }
-        else{
+        } else {
             throw new Exception(this.getName() + " is already enrolled in this course.");
         }
     }
@@ -51,13 +49,11 @@ public class Student extends Account {
         this.courses.remove(course);
     }
 
-    public void setGrade(Course course, int gradeValue) throws Exception{
-        if(this.courses.containsKey(course) && gradeValue != this.courses.get(course))
-        {
+    public void setGrade(Course course, int gradeValue) throws Exception {
+        if (this.courses.containsKey(course) && gradeValue != this.courses.get(course)) {
             int oldValue = this.courses.get(course);
             this.courses.replace(course, oldValue, gradeValue);
-        }
-        else
+        } else
             throw new Exception(this.getName() + " is not enrolled in this course");
 
     }
@@ -68,18 +64,26 @@ public class Student extends Account {
         return courses.keySet();
     }
 
-
     public Map<Course, Integer> getCoursesList() {
         return courses;
     }
 
     public String getCourseName(Course course) {
-        for (Course item : this.getCourses()){
-            if(item.getName().equals(course.getName()))
+        for (Course item : this.getCourses()) {
+            if (item.getName().equals(course.getName()))
                 return item.getName();
         }
         return "";
     }
+
+    public int getGrade(Course course) {
+        for (Course course1 : this.courses.keySet())
+            if (course == course1)
+                return this.courses.get(course);
+
+        return -1;
+    }
+
 
 //    public Platform.Group getGroup() {
 //        return group;
@@ -93,14 +97,14 @@ public class Student extends Account {
         this.printCourses();
     }
 
-    public void printCourses(){
+    public void printCourses() {
         System.out.println("List enlisted courses: \n" + Util.setToString(this.courses.keySet()));
     }
 
     public void coursesAndGrades() {
         StringBuilder coursesAndGradesStr = new StringBuilder();
         coursesAndGradesStr.append("List of courses and grades: ");
-        for(Course course : this.courses.keySet()) {
+        for (Course course : this.courses.keySet()) {
             if (this.courses.get(course) != 0)
                 coursesAndGradesStr.append("\n \t ").append(course.getName()).append(": ").append(this.courses.get(course));
             else
@@ -108,5 +112,6 @@ public class Student extends Account {
         }
         System.out.println(coursesAndGradesStr);
     }
+
 
 }

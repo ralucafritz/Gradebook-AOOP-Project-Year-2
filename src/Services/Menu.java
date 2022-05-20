@@ -1,4 +1,4 @@
-package Menus;
+package Services;
 
 import Client.Professor;
 import Client.Student;
@@ -10,6 +10,7 @@ import Platform.Group;
 import java.util.*;
 
 public class Menu {
+
 
     private ArrayList<Student> studentsList;
     private ArrayList<Professor> professorsList;
@@ -256,23 +257,59 @@ public class Menu {
 
     }
 
-//      FUTURE IMPLEMENTATION - MAYBE
-//    public void printCourseMenuOptions() {
-//        System.out.println("Welcome to the Course Menu! \n" +
-//                "You have the following options:\n" +
-//                "1. Show the current professor,\n" +
-//                "2. Show the groups enrolled in this course,\n" +
-//                "3. Show the percentage of PASSED students (if the course has already been graded),\n" +
-//                "4. Show the percentage of FAILED students (if the course has already been graded),\n" +
-//                "5. Show a list with the FAILED students (if the course has been graded).\n" +
-//                "6. Add course to a group. \n" +
-//                "Please select your choice: ");
-//          courseMenuOptions();
-//    }
-//
-//    public void courseMenuOptions(int choice) {
-//
-//    }
+    public void printSpecialMenuOptions() throws Exception {
+        System.out.println("Welcome to the Menu! \n" +
+                "You have the following options:\n" +
+                "1. Return the professors names for a specific group,\n" +
+                "2. Return the groups that are enrolled in a specific course,\n" +
+                "3. Return the students that passed a course, and the name of the course (if the course has already been graded),\n" +
+                "4. Return the students that failed a course, and the name of the course (if the course has already been graded),\n" +
+                "5. Return the students enrolled in a specific course,\n" +
+                "6. Return the students without grades, \n" +
+                "7. Go to the previous menu. \n" +
+                "Please select your choice: ");
+          specialMenuOptions();
+    }
+
+    public void specialMenuOptions() throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        boolean check = true;
+
+        switch (choice) {
+            case 1:
+                // professors names for a specific group
+                break;
+            case 2:
+                // groups that are enrolled in a specific group
+                break;
+            case 3:
+                // students that passed a course, and the name of the course
+                break;
+            case 4:
+                // students that failed a course, and the name of the course
+                break;
+            case 5:
+                // students enrolled in a specific course
+                break;
+            case 6:
+                // students without grades
+                break;
+            case 7:
+                scanner.close();
+                check = false;
+                break;
+            default:
+                System.out.println("You introduced an invalid choice, please try again.");
+                break;
+        }
+
+        if(check)
+            printSpecialMenuOptions();
+        else
+            printMenuOptions();
+    }
 
     // add by creating
     // STUDENT OR PROFESSOR
