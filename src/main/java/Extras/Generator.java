@@ -18,9 +18,16 @@ public class Generator {
     // at the moment nothing is used from this class.
 
 
-    private static final List<String> coursesNames = Arrays.asList("Advanced Algorithms","Advanced Object Orientated Programming",
-            "Computer Networking", "Software Development Methods", "Foreign Languages", "Artificial Intelligence",
-            "Operating Systems", "Statistics and Probabilities", "Databases");
+    private static final List<String> coursesNames = Arrays.asList(
+            "Advanced Algorithms",
+            "Advanced Object Orientated Programming",
+            "Computer Networking",
+            "Software Development Methods",
+            "Foreign Languages",
+            "Artificial Intelligence",
+            "Operating Systems",
+            "Statistics and Probabilities",
+            "Databases");
 
     // name generator from `names.txt` file that takes 2 random names from the file to create a realistic first and
     // last name
@@ -127,7 +134,10 @@ public class Generator {
     }
 
     public static Gender randomGenderGenerator() {
-        return Gender.values()[new Random().nextInt(Gender.values().length - 1)];
+        return Gender.values()
+                [
+                        new Random().nextInt(Gender.values().length - 1)
+                ];
     }
 
     public static Group groupGenerator(int numberStudents) throws Exception {
