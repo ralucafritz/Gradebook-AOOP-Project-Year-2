@@ -346,7 +346,7 @@ public class Menu {
                     for(Student student1 : studentsList)
                         if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) > 5)
                         {
-                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile, false);
                         }
                 }
                 CsvReports.readDataFromReport(nameFile);
@@ -361,7 +361,7 @@ public class Menu {
                     for(Student student1 : studentsList)
                         if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) > 0 && student1.getGrade(course1) < 5 )
                         {
-                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile, false);
                         }
                 }
                 CsvReports.readDataFromReport(nameFile);
@@ -379,7 +379,7 @@ public class Menu {
                         for(Student student1 : studentsList)
                             if(student1.checkEnrolledCourse(course1))
                             {
-                                CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                                CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile, false);
                             }
                 }
                 CsvReports.readDataFromReport(nameFile);
@@ -393,7 +393,7 @@ public class Menu {
                     for(Student student1 : studentsList)
                         if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) == 0)
                         {
-                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile, false);
                         }
                 }
                 CsvReports.readDataFromReport(nameFile);
@@ -487,6 +487,7 @@ public class Menu {
         printGroupList();
         System.out.println("Insert the name of the group: ");
         String groupName = scanner.nextLine();
+
         for(Group group1 : groupsList) {
             if(group1.getName().equalsIgnoreCase(groupName))
                 group1.addCourse(course);

@@ -1,6 +1,8 @@
 package Services;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CsvReports {
     private static String getFilePath(String nameFile) {
@@ -14,7 +16,7 @@ public class CsvReports {
                 System.out.println("File created: " + nameFile);
 
                 // REPORT HEADER
-                CsvReports.writeToReport(column1, column2, nameFile);
+                CsvReports.writeToReport(column1, column2, nameFile, true);
                 return false;
             } else {
                 System.out.println("File `" + nameFile + ".csv` already exists.");
@@ -48,12 +50,22 @@ public class CsvReports {
 //
 //    }
 
-    public static void writeToReport(String column1, String column2, String nameFile) {
+    public static void writeToReport(String column1, String column2, String nameFile, boolean isHeader) {
         String filePath = getFilePath(nameFile);
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {
+
         bufferedWriter.append(column1);
         bufferedWriter.append(",");
         bufferedWriter.append(column2);
+        SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+        String timeStamp = date.format(new Date());
+        if(isHeader)
+        {
+            bufferedWriter.append("");
+        }else
+        {
+            bufferedWriter.append(timeStamp);
+        }
         bufferedWriter.append("\n");
 
         System.out.println("Report successful.\n");
@@ -71,7 +83,8 @@ public class CsvReports {
 
             while((report = bufferedReader.readLine()) != null) {
                 String [] reportData = report.split(",");
-                System.out.println("\t" + reportData[0] + " \t " + reportData[1]);
+                System.out.println("\t" + reportData[0] + " \t " + reportData[1] + "\t" + reportData[2]);
+
             }
             System.out.println("\n");
 
