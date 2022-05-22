@@ -94,12 +94,6 @@ Clase actuale:
                 - [ ] print studentii unei grupe (? daca sa mai implementez)
                 - [ ] print notele unui student (? daca sa mai implementez)
                 - [x] go to previous menu
-- DE IMPLEMENTAT IN ETAPA 2 :
-    - [ ] selectezi o materie
-        - [ ] print prof
-        - [ ] print grupe
-        - [ ] print studenti picati
-        - [ ] sau alte chestii procente de nr studenti trecuti
 
 Lista undeva in cod cu nume de materii -> generator
 
@@ -123,4 +117,15 @@ Lista undeva in cod cu nume de materii -> generator
 
 
 
+ETAPA 2:
+Raporturi in fisiere de tip '.csv':
+- [x] professors that teach to a specific group
+- [x] groups enrolled in a specific course
+- [x] passed students 
+- [x] failed students
+- [x] enrolled students in a specific course
+- [x] students with courses not graded
 
+ETAPA 3:
+setup MYSQL as DB
+- CRUD = create read update delete
