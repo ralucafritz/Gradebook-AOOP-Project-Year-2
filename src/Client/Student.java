@@ -113,5 +113,13 @@ public class Student extends Account {
         System.out.println(coursesAndGradesStr);
     }
 
+    public boolean checkEnrolledCourse(Course course) {
+        if(this.courses.containsKey(course))
+        {
+            return true;
+        }
+        return false;
+    }
+
 
 }

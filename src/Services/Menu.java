@@ -7,7 +7,10 @@ import Interfaces.SetAccountInterface;
 import Platform.Course;
 import Platform.Group;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Menu {
 
@@ -16,6 +19,9 @@ public class Menu {
     private ArrayList<Professor> professorsList;
     private Set<Course> coursesList;
     private ArrayList<Group> groupsList;
+
+    private boolean checkCreation = false;
+
 
     // constructor with empty arraylists
     public Menu() {
@@ -35,7 +41,8 @@ public class Menu {
                 "4. Create a Course, \n" +
                 "5. Enter 'Student Menu', \n" +
                 "6. Enter 'Professor Menu', \n" +
-                "7. End the program. \n" +
+                "7. Enter 'Reports Menu', \n" +
+                "8. End the program. \n" +
                 "Please select your choice: ");
         menuOptions();
     }
@@ -97,6 +104,9 @@ public class Menu {
                     System.out.println("No professors found in the system.");
                 break;
             case 7:
+                printReportsMenuOptions();
+                break;
+            case 8:
                 // End program message
                 System.out.println("See you soon!");
                 // leave program
@@ -175,7 +185,6 @@ public class Menu {
                  // if 6  -> print main menu options
                  // if not -> print student menu potions
                  check = false;
-                 scanner.close();
                  break;
              default:
                  System.out.println("You introduced an invalid choice, please try again: ");
@@ -243,7 +252,6 @@ public class Menu {
                 System.out.println(stringToPrint);
                 break;
             case 4:
-                scanner.close();
                 check = false;
                 break;
             default:
@@ -257,8 +265,20 @@ public class Menu {
 
     }
 
-    public void printSpecialMenuOptions() throws Exception {
-        System.out.println("Welcome to the Menu! \n" +
+    public void printReportsMenuOptions() throws Exception {
+        // create or check if created report files
+
+        if(!checkCreation){
+            CsvReports.createReport("PROFESSOR","GROUP","ReportsProfessorsForAGroup");
+            CsvReports.createReport("GROUP","COURSE","ReportsGroupsInACourse");
+            CsvReports.createReport("STUDENT","PASSED COURSE","ReportsPassedStudents");
+            CsvReports.createReport("STUDENT","FAILED COURSE","ReportsFailedStudents");
+            CsvReports.createReport("STUDENT","ENROLLED IN","ReportsStudentsInACourse");
+            CsvReports.createReport("STUDENT","NOT GRADED IN","ReportsStudentsNotMarked");
+            checkCreation = true;
+        }
+
+        System.out.println("Welcome to the Reports Menu! \n" +
                 "You have the following options:\n" +
                 "1. Return the professors names for a specific group,\n" +
                 "2. Return the groups that are enrolled in a specific course,\n" +
@@ -268,36 +288,108 @@ public class Menu {
                 "6. Return the students without grades, \n" +
                 "7. Go to the previous menu. \n" +
                 "Please select your choice: ");
-          specialMenuOptions();
+          reportsMenuOptions();
     }
 
-    public void specialMenuOptions() throws Exception {
+    public void reportsMenuOptions() throws Exception {
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         scanner.nextLine();
         boolean check = true;
-
+        String nameFile = "";
         switch (choice) {
             case 1:
                 // professors names for a specific group
+                nameFile = "ReportsProfessorsForAGroup";
+                System.out.println("Select the group:");
+                printGroupList();
+                String groupName = scanner.nextLine();
+                for(Group group1 : groupsList)
+                {
+                    if(group1.getName().equalsIgnoreCase(groupName))
+                    {
+                        String finalNameFile = nameFile;
+                        group1.getProfessorsList().forEach(professor1 ->
+                                CsvReports.createReport(professor1.getName(), groupName, finalNameFile));
+                    }
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 2:
-                // groups that are enrolled in a specific group
+                // groups that are enrolled in a specific course
+                nameFile += "ReportsGroupsInACourse";
+                System.out.println("Select the course:");
+                printCourseList();
+                String courseName = scanner.nextLine();
+
+                for(Group group1: groupsList)
+                {
+                    String finalNameFile1 = nameFile;
+                    group1.getCoursesList().forEach(course1 -> {
+                        if(course1.getName().equalsIgnoreCase(courseName)){
+                            CsvReports.createReport(group1.getName(), courseName, finalNameFile1);
+                        }
+                    });
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 3:
                 // students that passed a course, and the name of the course
+                nameFile += "ReportsPassedStudents";
+                for(Course course1 : coursesList)
+                {
+                    for(Student student1 : studentsList)
+                        if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) > 5)
+                        {
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                        }
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 4:
                 // students that failed a course, and the name of the course
+                nameFile += "ReportsFailedStudents";
+                for(Course course1 : coursesList)
+                {
+                    for(Student student1 : studentsList)
+                        if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) > 0 && student1.getGrade(course1) < 5 )
+                        {
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                        }
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 5:
                 // students enrolled in a specific course
+                nameFile = "ReportsStudentsInACourse";
+                System.out.println("Select the course you want to check the enrolled students for: ");
+                printCourseList();
+                String nameCourse = scanner.nextLine();
+                for(Course course1 : coursesList)
+                {
+                    if(course1.getName().equalsIgnoreCase(nameCourse))
+                        for(Student student1 : studentsList)
+                            if(student1.checkEnrolledCourse(course1))
+                            {
+                                CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                            }
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 6:
                 // students without grades
+                nameFile =  "ReportsStudentsNotMarked";
+                for(Course course1 : coursesList)
+                {
+                    for(Student student1 : studentsList)
+                        if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) == 0)
+                        {
+                            CsvReports.writeToReport(student1.getName(), course1.getName(), nameFile);
+                        }
+                }
+                CsvReports.readDataFromReport(nameFile);
                 break;
             case 7:
-                scanner.close();
                 check = false;
                 break;
             default:
@@ -306,10 +398,11 @@ public class Menu {
         }
 
         if(check)
-            printSpecialMenuOptions();
+            printReportsMenuOptions();
         else
             printMenuOptions();
     }
+
 
     // add by creating
     // STUDENT OR PROFESSOR
