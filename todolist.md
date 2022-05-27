@@ -73,7 +73,7 @@ Clase actuale:
 
 
 - [x] FUNCTII MENIU INTERACTIV
-    - [x] initializeze datele de inceput random din functiile din Extras.Util // sa se creeze -> am trecut pe creat acum
+    - [x] initializeze datele de inceput random din functiile din extras.Util // sa se creeze -> am trecut pe creat acum
      - [x]  sa printeze un meniu
        - [x]  creare grupa
        - [x]  creare student -> nu se poate fara o grupa existenta
