@@ -13,6 +13,7 @@ import repositories.StudentRepository;
 import services.config.DatabaseConfiguration;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class Menu {
 
     private static Menu instance;
     private final Scanner sc;
+    private boolean init;
 
     private ArrayList<Student> studentsList;
     private ArrayList<Professor> professorsList;
@@ -31,14 +33,10 @@ public class Menu {
     private ArrayList<Group> groupsList;
 
     private Menu(){
-        sc = new Scanner(System.in);
-        this.studentsList = StudentRepository.getInstance().getStudentsList();
-        this.groupsList = GroupRepository.getInstance().getGroupList();
-        this.professorsList = ProfessorRepository.getInstance().getProfessorsList();
-        this.coursesList = CourseRepository.getInstance().getCourseList();
-
-        reportsFilesInit();
         databaseInit();
+        sc = new Scanner(System.in);
+        init = false;
+        reportsFilesInit();
     }
 
     public static Menu getInstance(){
@@ -77,7 +75,7 @@ public class Menu {
         // End program message
         System.out.println
                 (
-                    "\t\t\tThank you for your time!" +
+                    "\t\t\tThank you for your time! \n" +
                             "\t\t\t\tSee you soon!"
                 );
         // close connections
@@ -92,7 +90,15 @@ public class Menu {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // main menu options printed
-    public void printMenuOptions()  {
+    public void startMenu() {
+
+        if(!init) {
+            this.professorsList = ProfessorRepository.getInstance().getProfessorsList();
+            this.coursesList = CourseRepository.getInstance().getCourseList();
+            this.studentsList = StudentRepository.getInstance().getStudentsList();
+            this.groupsList = GroupRepository.getInstance().getGroupList();
+            init = true;
+        }
         MenuOptions.menuOptions();
         menuOptions();
     }
@@ -138,7 +144,7 @@ public class Menu {
                 break;
             case 2:
                 // create new student
-                MenuOptions.createOrRemove("group");
+                MenuOptions.createOrRemove("student");
                 int createOrRemoveStudent = Util.validationChoice(sc);
                 if(createOrRemoveStudent==1) {
                     createStudentOrProfessor(new Student(), true);
@@ -149,7 +155,7 @@ public class Menu {
                 break;
             case 3:
                 // create new professor
-                MenuOptions.createOrRemove("group");
+                MenuOptions.createOrRemove("professor");
                 int createOrRemoveProfessor = Util.validationChoice(sc);
                 if(createOrRemoveProfessor==1) {
                     createStudentOrProfessor(new Professor(), false);
@@ -160,7 +166,7 @@ public class Menu {
                 break;
             case 4:
                 // create course
-                MenuOptions.createOrRemove("group");
+                MenuOptions.createOrRemove("course");
                 int createOrRemoveCourse = Util.validationChoice(sc);
                 if(createOrRemoveCourse==1) {
                     createCourse();
@@ -197,7 +203,7 @@ public class Menu {
                 break;
         }
         // print main menu options
-        printMenuOptions();
+        startMenu();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,15 +228,27 @@ public class Menu {
              case 3:
                  // print the group name
                  for (Group group1 : this.getGroupsList()) {
-                     if (group1.getStudentsList().contains(student))
-                         System.out.println(group1.getName());
+                     group1.getStudentsList().forEach(student1 -> {
+                         if(student1.getID()==student.getID())
+                             System.out.println("Group: "
+                                     + group1.getName());
+                     });
                  }
                  break;
              case 4:
                  // print the group students, including this student
-                 for (Group group1 : this.getGroupsList()) {
-                     if (group1.getStudentsList().contains(student))
-                         System.out.println(group1.printStudentsList("\t", "\n"));
+                 try {
+                     for (Group group1 : this.getGroupsList()) {
+                         group1.getStudentsList().forEach(student1 -> {
+                             if (student1.getID() == student.getID())
+                                 System.out.println("Students in group "
+                                         + group1.getName()
+                                         + ": \n "
+                                         + group1.printStudentsList("\t", "\n"));
+                         });
+                     }
+                 }catch (ConcurrentModificationException e) {
+                     // empty catch
                  }
                  break;
              case 5:
@@ -265,7 +283,7 @@ public class Menu {
          if(!checkIfWeLeave)
              printStudentMenuOptions(student);
          else
-             printMenuOptions();
+             startMenu();
 
     }
 
@@ -300,26 +318,26 @@ public class Menu {
                         System.out.println("Course selected: " + courseName);
 
                         for (Student student1 : this.getStudentsList()) {
-                            if (student1.getCourses().contains(course1)) {
+                            for(Course course2 : student1.getCourses()) {
+                                if (course2.getID() == course1.getID()) {
+                                    System.out.println("Insert the grade for " + student1.getName() + ": ");
 
-                                System.out.println("Insert the grade for " + student1.getName() + ": ");
+                                    // read the grade
+                                    int grade = sc.nextInt();
+                                    sc.nextLine();
 
-                                // read the grade
-                                int grade = sc.nextInt();
-                                sc.nextLine();
+                                    // mark the course
+                                    professor.mark(student1, course1, grade);
 
-                                // mark the course
-                                professor.mark(student1, course1, grade);
-
-                                // update objects
-                                student1.updateDB();
-                                professor.updateDB();
+                                    // update objects
+                                    student1.updateDB();
+                                    professor.updateDB();
+                                }
                             }
                         }
+                        }
                     }
-                }
                 break;
-
             case 3:
                 // print groups enrolled in a course
 
@@ -329,13 +347,13 @@ public class Menu {
                             .append(course.getName())
                             .append("\n");
                     for (Group group : this.getGroupsList()) {
-
-                        if (group.getCoursesList().contains(course)) {
-                            stringToPrint
-                                    .append("\t")
-                                    .append(group.getName())
-                                    .append("\n");
-                        }
+                        group.getCoursesList().forEach(course2 -> {
+                            if(course2.getID()==course.getID())
+                                stringToPrint
+                                        .append("\t")
+                                        .append(group.getName())
+                                        .append("\n");
+                        });
                     }
                 }
                 System.out.println(stringToPrint);
@@ -350,7 +368,7 @@ public class Menu {
         if(!checkIfWeLeave)
             printProfessorMenuOptions(professor);
         else
-            printMenuOptions();
+            startMenu();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,8 +392,8 @@ public class Menu {
                             (professor1 -> CsvReports.writeToReport
                                     (professor1.getName(), groupRepProf.getName(), nameFileRepProfGroup));
 
-                    CsvReports.endOfReport(nameFileRepProfGroup);
                     CsvReports.readDataFromReport(nameFileRepProfGroup);
+                    CsvReports.endOfReport(nameFileRepProfGroup);
                 }
                 break;
             case 2:
@@ -386,7 +404,7 @@ public class Menu {
                 printCoursesList();
 
                 System.out.print("Insert the name of the course: ");
-                String courseName = sc.nextLine();
+                String courseName = sc.nextLine().toUpperCase();
 
                 groupsList.forEach(courseRepGroup -> {
                     courseRepGroup.getCoursesList().forEach
@@ -397,8 +415,8 @@ public class Menu {
                                 }
                             });
                 });
-                CsvReports.endOfReport(nameFileRepGroupCourse);
                 CsvReports.readDataFromReport(nameFileRepGroupCourse);
+                CsvReports.endOfReport(nameFileRepGroupCourse);
                 break;
             case 3:
                 // all students that passed a course + the name of the course
@@ -407,14 +425,14 @@ public class Menu {
                 coursesList.forEach(course1 -> {
                     studentsList.forEach
                             (student1 -> {
-                                if(student1.checkEnrolledCourse(course1) && student1.getGrade(course1) > 5) {
+                                if(student1.isCourseInList(course1) && student1.getGrade(course1) >= 5) {
                                     CsvReports.writeToReport
-                                            (student1.getName(), course1.getName(), nameFileRepPassStudents);
+                                            (student1.getName(), course1.getName() + " - " + student1.getGrade(course1), nameFileRepPassStudents);
                                 }
                             });
                 });
-                CsvReports.endOfReport(nameFileRepPassStudents);
                 CsvReports.readDataFromReport(nameFileRepPassStudents);
+                CsvReports.endOfReport(nameFileRepPassStudents);
                 break;
 
             case 4:
@@ -424,16 +442,16 @@ public class Menu {
                 coursesList.forEach( course1 -> {
                     studentsList.forEach
                             (student1 -> {
-                                if (student1.checkEnrolledCourse(course1)
+                                if (student1.isCourseInList(course1)
                                         && student1.getGrade(course1) > 0
                                         && student1.getGrade(course1) < 5) {
                                     CsvReports.writeToReport
-                                            (student1.getName(), course1.getName(), nameFileRepFailStudents);
+                                            (student1.getName(), course1.getName() + " - " + student1.getGrade(course1), nameFileRepFailStudents);
                                 }
                             });
                 });
-                CsvReports.endOfReport(nameFileRepFailStudents);
                 CsvReports.readDataFromReport(nameFileRepFailStudents);
+                CsvReports.endOfReport(nameFileRepFailStudents);
                 break;
             case 5:
                 // students enrolled in a specific course
@@ -442,14 +460,14 @@ public class Menu {
                 Course courseRepStudents = selectCourse();
                 if(courseRepStudents!=null) {
                     studentsList.forEach(student1 -> {
-                        if (student1.checkEnrolledCourse(courseRepStudents)) {
+                        if (student1.isCourseInList(courseRepStudents)) {
                             CsvReports.writeToReport
                                     (student1.getName(), courseRepStudents.getName(), nameFileRepCourseStudents);
                         }
                     });
 
-                    CsvReports.endOfReport(nameFileRepCourseStudents);
                     CsvReports.readDataFromReport(nameFileRepCourseStudents);
+                    CsvReports.endOfReport(nameFileRepCourseStudents);
                 }
                 break;
             case 6:
@@ -458,15 +476,15 @@ public class Menu {
 
                 coursesList.forEach(course1 -> {
                     for(Student student1 : studentsList)
-                        if(student1.checkEnrolledCourse(course1)
+                        if(student1.isCourseInList(course1)
                                 && student1.getGrade(course1) == 0)
                         {
                             CsvReports.writeToReport
                                     (student1.getName(), course1.getName(), nameFileRepNotGraded);
                         }
                 });
-                CsvReports.endOfReport(nameFileRepNotGraded);
                 CsvReports.readDataFromReport(nameFileRepNotGraded);
+                CsvReports.endOfReport(nameFileRepNotGraded);
                 break;
             case 7:
                 checkIfWeLeave = true;
@@ -478,7 +496,7 @@ public class Menu {
         if(!checkIfWeLeave)
             printReportsMenuOptions();
         else
-            printMenuOptions();
+            startMenu();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,7 +562,7 @@ public class Menu {
         if(coursesList.size() != 0) {
             System.out.println("Select course from list: ");
             this.printCoursesList();
-            System.out.print("Insert the course's number: ");
+            System.out.print("Insert the course's name: ");
             // retrieve the wanted student name
             String courseName = sc.nextLine();
             // go through the list of students and check if the student we wanted
@@ -561,7 +579,7 @@ public class Menu {
 
 
     public String yesOrNo(){
-        System.out.print("Yes/No");
+        System.out.print("Yes/No: ");
         String choice = sc.nextLine();
         while(!choice.equalsIgnoreCase("yes") && !choice.equalsIgnoreCase("no")){
             System.out.println("The answer must be either \"yes\" or \"no\". \n" +
@@ -585,7 +603,6 @@ public class Menu {
         }
     }
 
-
     // STUDENT OR PROFESSOR
 
     // template method for creating a student or a professor, both of them implementing the
@@ -608,15 +625,16 @@ public class Menu {
 
                 if (isStudent) {
 
+                    if (!studentsList.contains(account)) {
+                        this.studentsList.add((Student) account);
+                        StudentRepository.getInstance().addStudent((Student) account);
+                    }
+
                     Group group1 = selectGroup();
                     if(group1!=null) {
                         group1.addStudent((Student) account);
                         group1.updateDB();
 
-                        if (!studentsList.contains(account)) {
-                            this.studentsList.add((Student) account);
-                            StudentRepository.getInstance().addStudent((Student) account);
-                        }
                     }
                 } else {
                     if (!professorsList.contains((Professor) account)) {
@@ -651,6 +669,7 @@ public class Menu {
             String choice = yesOrNo();
 
             if (choice.equalsIgnoreCase("yes")) {
+                printProfessorsList();
                 System.out.println("Insert the full name of the professor: ");
                 String profName = sc.nextLine();
                 for (Professor professor : professorsList)
@@ -666,7 +685,9 @@ public class Menu {
         }
 
         // create course
-        Course course = new Course(name, true, professorForCourse);
+        Course course = new Course(name);
+
+
 
         // assign the course to a specific group
         System.out.println("Select the group that will be enrolled in this course: ");
@@ -675,23 +696,30 @@ public class Menu {
 
         System.out.print("Insert the number of the group: ");
         String groupName = sc.nextLine();
+
+        this.coursesList.add(course);
+        CourseRepository.getInstance().addCourse(course);
+
+        assert professorForCourse != null;
+        professorForCourse.addCourse(course);
+        professorForCourse.updateDB();
+
+
         boolean correctName = false;
         while(!correctName){
             for(Group group1 : groupsList) {
                 if (group1.getName().equalsIgnoreCase(groupName)) {
                     group1.addCourse(course);
+                    group1.addProfessor(professorForCourse);
+                    group1.updateDB();
                     correctName = true;
                 }
             }
-            if(correctName) {
+            if(!correctName) {
                 System.out.println("You have inserted a wrong number. \n");
                 System.out.print("Please insert the number of an existing group: ");
                 groupName = sc.nextLine();
             }
-        }
-        if (!coursesList.contains(course)) {
-            this.coursesList.add(course);
-            CourseRepository.getInstance().addCourse(course);
         }
     }
 
@@ -703,14 +731,17 @@ public class Menu {
         if (professorsList.contains(professor))
         {
             // if we delete a professor, we have to also delete the class that the professor teaches :D
-            // delete professor from courses it teaches ++ will get deleted from each group aswell
-            for(Course course : coursesList)
+            // delete professor from courses it teaches
+            for(Course course : professor.getCourses())
             {
-                if(course.getProfessor().getID()==professor.getID()) {
-                    int courseId = CourseRepository.getInstance().getIdByObject(course);
-                    CourseRepository.getInstance().deleteCourseById(courseId);
-                }
+                removeCourse(course);
             }
+            for(Group  group : groupsList)
+            {
+                group.removeProfessor(professor);
+                group.updateDB();
+            }
+
             // delete professor from professors list
             this.professorsList.remove(professor);
             int professorId = ProfessorRepository.getInstance().getIdByObject(professor);
@@ -728,10 +759,9 @@ public class Menu {
                     group.updateDB();
                 }
             }
-
             // remove student from the students list
             this.studentsList.remove(student);
-            int studentId = StudentRepository.getInstance().getIdByObject(student);
+            int studentId = StudentRepository.getInstance().getIdByStudent(student);
             StudentRepository.getInstance().deleteStudentById(studentId);
         }
     }
@@ -744,7 +774,7 @@ public class Menu {
 
             group.getStudentsList().forEach(student -> {
                 studentsList.remove(student);
-                int studentId = StudentRepository.getInstance().getIdByObject(student);
+                int studentId = StudentRepository.getInstance().getIdByStudent(student);
                 StudentRepository.getInstance().deleteStudentById(studentId);
             });
 
@@ -755,20 +785,38 @@ public class Menu {
 
     private void removeCourse(Course course) {
         if (coursesList.contains(course)) {
-            groupsList.forEach(group -> {
-                if(group.getCoursesList().contains(course)){
-                    // removes it from all the students in the group too
-                    group.removeCourse(course);
-                    group.updateDB();
-                }
-            });
 
-            Professor professor = course.getProfessor();
+            // remove it from the professor
+            for(Professor professor : professorsList)
+            {
+                try {
+                    professor.getCourses().forEach(course1 -> {
+                        if (course1.getID() == course.getID()) {
+
+                            professor.removeCourse(course1);
+                            professor.updateDB();
+                        }
+
+                    });
+                } catch(ConcurrentModificationException e) {
+                    // empty catch
+                }
+            }
+
+            groupsList.forEach(group -> {
+                group.getCoursesList().forEach(course2 -> {
+                    if(course2.getID()==course.getID())
+                    {
+                        group.removeCourse(course2);
+                        group.updateDB();
+                    }
+                });
+            });
 
             // delete course from courses list
             this.coursesList.remove(course);
 
-            int courseId = CourseRepository.getInstance().getIdByObject(course);
+            int courseId = CourseRepository.getInstance().getIdByCourse(course);
             CourseRepository.getInstance().deleteCourseById(courseId);
         }
     }

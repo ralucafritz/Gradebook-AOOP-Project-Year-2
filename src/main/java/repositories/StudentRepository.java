@@ -93,7 +93,7 @@ public class StudentRepository {
         return null;
     }
 
-    public int getIdByObject(Student student) {
+    public int getIdByStudent(Student student) {
         String selectSQL = "SELECT * FROM student WHERE currentId=?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
@@ -103,8 +103,11 @@ public class StudentRepository {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            int objectId = -1;
             if(resultSet.next())
-                return resultSet.getInt(1);
+                objectId = resultSet.getInt(1);
+
+            return objectId;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,7 +118,7 @@ public class StudentRepository {
     }
 
     public ArrayList<Student> getStudentsList() {
-        String selectStudentsSQL = "SELECT * FROM professor";
+        String selectStudentsSQL = "SELECT * FROM student";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
         ArrayList<Student> studentsList = new ArrayList<>();
@@ -128,7 +131,7 @@ public class StudentRepository {
                 Student student = mapToStudent(resultSet);
 
                 if (student != null){
-                    System.out.println("Student ID # " + resultSet.getString(1) + "loaded");
+                    System.out.println("Student ID # " + resultSet.getString(1) + " loaded");
                     studentsList.add(student);
                 }
             }

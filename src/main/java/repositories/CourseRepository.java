@@ -21,14 +21,11 @@ public class CourseRepository {
         return instance;
     }
 
-
     public void createTable() {
         String createTableSql = "CREATE TABLE IF NOT EXISTS course " +
                 "(" +
                     "courseId int PRIMARY KEY AUTO_INCREMENT, " +
                     "name varchar(40), " +
-                    "hasProfessor boolean," +
-                    "professorId int," +
                     "currentId int" +
                 ")";
 
@@ -45,16 +42,14 @@ public class CourseRepository {
     // CREATE
     public void addCourse(Course course) {
 
-        String insertCourseSql = "INSERT INTO course(name, hasProfessor, professorId, currentId) VALUES(?, ?,?, ?)";
+        String insertCourseSql = "INSERT INTO course(name, currentId) VALUES(?, ?)";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertCourseSql)) {
+
             preparedStatement.setString(1, course.getName());
-            preparedStatement.setBoolean(2, course.hasProfessor());
-            ProfessorRepository professorRepository = ProfessorRepository.getInstance();
-            preparedStatement.setInt(3, professorRepository.getIdByObject(course.getProfessor()));
-            preparedStatement.setInt(4, course.getID());
+            preparedStatement.setInt(2, course.getID());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -63,7 +58,7 @@ public class CourseRepository {
     }
 
     // GET / READ
-    public  Course getObjectById(int id) {
+    public  Course getCourseById(int id) {
 
         String selectSQL = "SELECT * FROM course WHERE courseId =?";
 
@@ -83,27 +78,28 @@ public class CourseRepository {
         return null;
     }
 
-    public int getIdByObject(Course course1) {
+    public int getIdByCourse(Course course1) {
         String selectSQL = "SELECT * FROM course WHERE currentId=?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
-            ProfessorRepository professorRepository = ProfessorRepository.getInstance();
 
             preparedStatement.setInt(1, course1.getID());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            int idObject = -1;
             if(resultSet.next())
-                return resultSet.getInt(1);
+                idObject = resultSet.getInt(1);
+            return idObject;
 
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     // DELETE
@@ -122,11 +118,8 @@ public class CourseRepository {
             ResultSet resultSet = stmt.executeQuery(selectSql);
 
             while (resultSet.next()) {
-                Course course = new Course(
-                        resultSet.getString(2),
-                        resultSet.getBoolean(3),
-                        resultSet.getInt(4),
-                        resultSet.getInt(5));
+                Course course = mapToCourse(resultSet);
+
                 if(course!= null) {
                     System.out.println("Course #ID " +
                             resultSet.getString(1) +
@@ -141,17 +134,15 @@ public class CourseRepository {
         }
     }
 
-    public void updateCourse(Course course1, int id) {
+    public void updateCourse(Course course1, int courseId) {
 
-        String updateProfessorSql = "UPDATE course SET name=? AND hasProfessor=? AND professorId=? WHERE courseId=?";
+        String updateProfessorSql = "UPDATE course SET name=? WHERE courseId=?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateProfessorSql)) {
             preparedStatement.setString(1, course1.getName());
-            preparedStatement.setBoolean(2, course1.hasProfessor());
-            preparedStatement.setInt(3, professorRepository.getIdByObject(course1.getProfessor()));
-            preparedStatement.setInt(4, course1.getID());
+            preparedStatement.setInt(2, courseId);
 
             preparedStatement.executeUpdate();
 
@@ -175,7 +166,7 @@ public class CourseRepository {
                 Course course = mapToCourse(resultSet);
 
                 if (course != null){
-                    System.out.println("Course ID # " + resultSet.getString(1) + "loaded");
+                    System.out.println("Course ID # " + resultSet.getString(1) + " loaded");
                     coursesList.add(course);
                 }
             }
@@ -194,9 +185,7 @@ public class CourseRepository {
         try{
             return new Course(
                     resultSet.getString(2),
-                    resultSet.getBoolean(3),
-                    resultSet.getInt(4),
-                    resultSet.getInt(5));
+                    resultSet.getInt(3));
         } catch (Exception e) {
             e.printStackTrace();
         }

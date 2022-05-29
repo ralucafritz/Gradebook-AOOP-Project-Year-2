@@ -39,25 +39,31 @@ public class Student extends Account {
     // CONSTRUCTOR FOR LOADING DATA FROM THE DB
     public Student(String name, String gender, String dateOfBirth, String courses, int currentID)  {
         super(name, gender, dateOfBirth);
+        setCurrentID(currentID);
 
         if(!courses.isEmpty()) {
              String[] coursesGradesArr = courses.split(","); // ex 1-10,2-20..
 
              for (String str : coursesGradesArr) {
                  // ex str = 1-10
+                 if(str!=""){
                  String[] strArr = str.split("-");
 
                  int idCourse = Integer.parseInt(strArr[0]);
                  int grade = Integer.parseInt(strArr[1]);
 
                  CourseRepository courseRepository = CourseRepository.getInstance();
-
-                 Course course = courseRepository.getObjectById(idCourse);
+                 Course course = courseRepository.getCourseById(idCourse);
 
                  addCourse(course);
+
+                 if(grade!=0)
+                 {
+                    setGrade(course, grade);
+                 }
+                 }
              }
         }
-        setCurrentID(currentID);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +73,7 @@ public class Student extends Account {
     // ADD COURSE AND EDIT THE COURSES LIST
     public void addCourse(Course course)  {
         try {
-            if (!this.courses.containsKey(course) && !getCourseName(course).equals(course.getName())) {
+            if (!isCourseInList(course)) {
                 this.courses.put(course, 0);
             } else {
                 throw new Exception(this.getName() + " is already enrolled in this course.");
@@ -86,11 +92,12 @@ public class Student extends Account {
     // THIS CAN ONLY BE DONE BY A PROFESSOR
     public void setGrade(Course course, int gradeValue)  {
         try {
-            if (this.courses.containsKey(course) && gradeValue != this.courses.get(course)) {
-                int oldValue = this.courses.get(course);
-                this.courses.replace(course, oldValue, gradeValue);
+            if (isCourseInList(course)) {
+                Course thisCourse = getCourseFromList(course);
+                int oldValue = this.courses.get(thisCourse);
+                this.courses.replace(thisCourse, oldValue, gradeValue);
             } else
-                throw new Exception(this.getName() + " is not enrolled in this course");
+                throw new Exception("Something went wrong.");
         } catch (Exception e) {
         e.printStackTrace();
          }
@@ -113,18 +120,18 @@ public class Student extends Account {
         return courses;
     }
 
-    public String getCourseName(Course course) {
+    private Course getCourseFromList(Course course) {
         for (Course item : this.getCourses()) {
-            if (item.getName().equals(course.getName()))
-                return item.getName();
+            if (item.getID()==course.getID())
+                return item;
         }
-        return "";
+        return null;
     }
 
     public int getGrade(Course course) {
         for (Course course1 : this.courses.keySet())
-            if (course == course1)
-                return this.courses.get(course);
+            if (isCourseInList(course) && course.getID() == course1.getID())
+                return this.courses.get(course1);
         return -1;
     }
 
@@ -163,10 +170,12 @@ public class Student extends Account {
 /////////////////////////////////////////////// EXTRA METHODS /////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // returns the id of the course IF the student is enrolled in this course
     // CHECK IF THE STUDENT IS ENROLLED IN THE COURSE SPECIFIED OR NOT
-    public boolean checkEnrolledCourse(Course course) {
-        if (this.courses.containsKey(course)) {
-            return true;
+    public boolean isCourseInList(Course course) {
+        for (Course item : this.getCourses()) {
+            if (item.getID()==course.getID())
+                return true;
         }
         return false;
     }
@@ -185,7 +194,7 @@ public class Student extends Account {
             int idCourse = Integer.parseInt(strArr[0]);
             int grade = Integer.parseInt(strArr[1]);
 
-            Course course = CourseRepository.getInstance().getObjectById(idCourse);
+            Course course = CourseRepository.getInstance().getCourseById(idCourse);
             coursesAndGradesLocal.put(course, grade);
         }
         return coursesAndGradesLocal;
@@ -201,7 +210,7 @@ public class Student extends Account {
             if(stringBuilder.length() != 0)
                 stringBuilder.append(",");
             stringBuilder
-                    .append(courseRepository.getIdByObject(course))
+                    .append(courseRepository.getIdByCourse(course))
                     .append("-")
                     .append(courses.get(course));
         }
@@ -213,8 +222,8 @@ public class Student extends Account {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void updateDB() {
-        if(StudentRepository.getInstance().getIdByObject(this)!=-1) {
-            int studentId = StudentRepository.getInstance().getIdByObject(this);
+        int studentId = StudentRepository.getInstance().getIdByStudent(this);
+        if(studentId!=-1) {
             StudentRepository.getInstance().updateStudent(this, studentId);
         }
     }

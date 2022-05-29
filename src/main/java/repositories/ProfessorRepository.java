@@ -180,7 +180,7 @@ public class ProfessorRepository {
                 Professor professor = mapToProfessor(resultSet);
 
                 if (professor != null){
-                    System.out.println("Professor ID # " + resultSet.getString(1) + "loaded");
+                    System.out.println("Professor ID # " + resultSet.getString(1) + " loaded");
                     professorsList.add(professor);
                 }
             }

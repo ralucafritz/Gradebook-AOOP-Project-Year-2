@@ -26,7 +26,7 @@ public class CsvReports {
                 System.out.println("File created: " + nameFile);
 
                 // REPORT HEADER
-                CsvReports.writeToReportWithHeader(column1, column2, nameFile, true);
+                CsvReports.writeToReportWithHeader(column1, column2, nameFile, true, false);
                 return false;
             } else {
                 System.out.println("File `" + nameFile + ".csv` already exists.");
@@ -44,7 +44,7 @@ public class CsvReports {
 ///////////////////////////////////////////// WRITE TO REPORT /////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void writeToReportWithHeader(String column1, String column2, String nameFile, boolean isHeader) {
+    public static void writeToReportWithHeader(String column1, String column2, String nameFile, boolean isHeader, boolean isEndReport) {
         String filePath = getFilePath(nameFile);
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {
 
@@ -59,6 +59,9 @@ public class CsvReports {
         if(isHeader)
         {
             bufferedWriter.append("Timestamp");
+        }else if (isEndReport)
+        {
+            bufferedWriter.append("=====");
         }else
         {
             bufferedWriter.append(timeStamp);
@@ -75,7 +78,7 @@ public class CsvReports {
 
     public static void writeToReport(String column1, String column2, String nameFile)
     {
-        writeToReportWithHeader(column1, column2, nameFile, false);
+        writeToReportWithHeader(column1, column2, nameFile, false,false);
     }
 
     public static void readDataFromReport(String nameFile) {
@@ -96,7 +99,7 @@ public class CsvReports {
     }
 
     public static void endOfReport(String nameFile) {
-        writeToReport("========","========", nameFile);
+        writeToReport("=====","=====", nameFile);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

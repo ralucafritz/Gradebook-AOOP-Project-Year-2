@@ -2,7 +2,10 @@ package clientSide;
 
 import interfaces.GetNameInterface;
 import repositories.CourseRepository;
-import repositories.ProfessorRepository;
+import repositories.GroupRepository;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 public class Course implements GetNameInterface {
 
@@ -12,9 +15,6 @@ public class Course implements GetNameInterface {
 
     private String name;
     private int currentID;
-    private boolean hasProfessor;
-    private Professor professor;
-
     private static int ID;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,28 +23,33 @@ public class Course implements GetNameInterface {
 
     /// EMPTY CONSTRUCTOR FOR A COURSE
     public Course() {
+        Set<Course> listCourse = CourseRepository.getInstance().getCourseList();
+        for(Course course : listCourse) {
+            if(course.getID()==ID){
+                ID++;
+            }
+        }
         this.currentID = ID;
         ID ++;
     }
 
     // CONSTRUCTOR WITH PARAMETERS
-    public Course(String name, boolean hasProfessor, Professor professor) {
-        this.name = name;
-        this.professor = professor;
-        this.hasProfessor = true;
-        this.professor.addCourse(this);
 
+    public Course(String name) {
+        this.name = name;
+        Set<Course> listCourse = CourseRepository.getInstance().getCourseList();
+        for(Course course : listCourse) {
+            if(course.getID()==ID){
+                ID++;
+            }
+        }
         this.currentID = ID;
         ID ++;
     }
 
     // CONSTRUCTOR FOR LOADING DATA FROM THE DB
-    public Course(String name, boolean hasProfessor, int professorId, int currentID)   {
+    public Course(String name, int currentID)   {
         this.name = name;
-        this.hasProfessor = true;
-        ProfessorRepository professorRepository = ProfessorRepository.getInstance();
-        this.professor = professorRepository.getProfessorById(professorId);
-        this.professor.addCourse(this);
         this.currentID = currentID;
     }
 
@@ -55,11 +60,11 @@ public class Course implements GetNameInterface {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void changeProfessor(Professor professorToBeSelected) {
-        this.professor = professorToBeSelected;
-        professorToBeSelected.addCourse(this);
-    }
+//
+//    public void changeProfessor(Professor professorToBeSelected) {
+//        this.professor = professorToBeSelected;
+//        professorToBeSelected.addCourse(this);
+//    }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// ACCESSORS ////////////////////////////////////////////////////////
@@ -73,20 +78,12 @@ public class Course implements GetNameInterface {
         return currentID;
     }
 
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public boolean hasProfessor() {
-        return hasProfessor;
-    }
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////// DATABASE //////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void updateDB() {
-        int courseId = CourseRepository.getInstance().getIdByObject(this);
+        int courseId = CourseRepository.getInstance().getIdByCourse(this);
         CourseRepository.getInstance().updateCourse(this, courseId);
     }
 

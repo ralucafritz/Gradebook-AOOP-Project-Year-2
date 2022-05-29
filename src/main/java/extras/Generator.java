@@ -166,7 +166,7 @@ public class Generator {
         int randIndex = Util.getRandomNumber(coursesNames.size() - 1, 0);
         String name = coursesNames.get(randIndex);
 
-        return new Course(name, true, professor);
+        return new Course(name);
     }
 
 }

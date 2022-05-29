@@ -4,9 +4,14 @@ import extras.Gender;
 import extras.Util;
 import interfaces.GetNameInterface;
 import interfaces.SetAccountInterface;
+import repositories.CourseRepository;
+import repositories.ProfessorRepository;
+import repositories.StudentRepository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 public abstract class Account implements GetNameInterface, SetAccountInterface {
 
@@ -42,6 +47,16 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
     public Account(String name, String dateOfBirth)  {
         this(name, Gender.Unknown, dateOfBirth);
 
+        ArrayList<Student> listStudent = StudentRepository.getInstance().getStudentsList();
+        ArrayList<Professor> listProfessor = ProfessorRepository.getInstance().getProfessorsList();
+
+        for(Student student : listStudent) {
+            for(Professor professor : listProfessor){
+                while(student.getID()==ID || professor.getID()==ID){
+                         ID++;
+                 }
+            }
+        }
         this.currentID = ID;
         ID ++;
     }
@@ -50,6 +65,18 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
+
+        ArrayList<Student> listStudent = StudentRepository.getInstance().getStudentsList();
+        ArrayList<Professor> listProfessor = ProfessorRepository.getInstance().getProfessorsList();
+
+        for(Student student : listStudent) {
+            for(Professor professor : listProfessor){
+                while(student.getID()==ID || professor.getID()==ID){
+                    ID++;
+                }
+            }
+        }
+
         this.currentID = ID;
         ID ++;
     }
@@ -58,6 +85,7 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
         this.name = name;
         this.gender = Util.genderStringValidation(gender);
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
+
         this.currentID = ID;
         ID ++;
     }
@@ -104,7 +132,7 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
     }
 
     public int getID() {
-        return ID;
+        return currentID;
     }
 
     public int getAge() {

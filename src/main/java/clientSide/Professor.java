@@ -23,7 +23,6 @@ public class Professor extends Account{
     /// EMPTY CONSTRUCTOR FOR A PROFESSOR
     public Professor()  {
         super();
-
     }
 
     // CONSTRUCTOR WITH PARAMETERS
@@ -34,19 +33,20 @@ public class Professor extends Account{
     // CONSTRUCTOR FOR LOADING DATA FROM THE DB
     public Professor(String name, String gender, String dateOfBirth, String courses, int currentId)  {
         super(name, gender, dateOfBirth);
+        setCurrentID(currentId);
 
-        String[] courseIds = courses.split(","); // ex 1-10,2-20..
+        String[] courseIds = courses.split(","); // ex 1,2..
 
         for (String id : courseIds) {
             // ex str = 1,2,3...
             if(!id.isEmpty()) {
-                CourseRepository courseRepository = CourseRepository.getInstance();
-                Course course = courseRepository.getObjectById(Integer.parseInt(id));
-
-                addCourse(course);
+                int courseId = Integer.parseInt(id);
+                if(courseId!=-1) {
+                    Course course = CourseRepository.getInstance().getCourseById(courseId);
+                    addCourse(course);
+                }
             }
         }
-        setCurrentID(currentId);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,6 @@ public class Professor extends Account{
         if(!courses.isEmpty()) {
             System.out.println("\t List teaching courses: \n" +
                     Util.setToString(this.courses, "\t \t", "\n"));
-
         }
     }
 
@@ -92,10 +91,12 @@ public class Professor extends Account{
 
     public void mark(Student student, Course course, int grade)  {
         try {
-            if (this == course.getProfessor() && this.courses.contains(course)) {
-                student.setGrade(course, grade);
-            } else
-                throw new Exception(this.getName() + " is not teaching this course");
+            for(Course courseSearch : this.courses)
+            {
+                if (courseSearch.getID() == course.getID()) {
+                    student.setGrade(courseSearch, grade);
+                }
+            }
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,11 +104,15 @@ public class Professor extends Account{
 
     public String returnCoursesList() {
         StringBuilder stringBuilder = new StringBuilder();
-        CourseRepository courseRepository = CourseRepository.getInstance();
         for (Course course : courses) {
-            if (stringBuilder.length() != 0)
-                stringBuilder.append(",");
-            stringBuilder.append(courseRepository.getIdByObject(course));
+            if (course != null) {
+                if (stringBuilder.length() != 0)
+                    stringBuilder.append(",");
+                int courseId = CourseRepository.getInstance().getIdByCourse(course);
+                if(courseId!=-1) {
+                    stringBuilder.append(courseId);
+                }
+            }
         }
 
         return stringBuilder.toString();

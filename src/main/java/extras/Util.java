@@ -70,7 +70,7 @@ public class Util  {
     // for each case
     public static Gender genderStringValidation(String gender)  {
         try {
-            if (gender.equals("M") || gender.equals("F")) {
+            if (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F")) {
                 if(gender.equals("M"))
                     return Gender.M;
                 else
@@ -85,16 +85,19 @@ public class Util  {
     }
 
     public static int validationChoice(Scanner sc) {
-        while(true)
-            try {
-                int choice = sc.nextInt();
-                sc.nextLine();
-                return choice;
-            } catch (Exception e){
-                e.printStackTrace();
-                System.out.println("You have introduced a wrong value, please try again. ");
-                System.out.print("Insert your choice: ");
-            }
+        int choice = 0;
+
+        try {
+            choice = sc.nextInt();
+            sc.nextLine();
+
+        } catch (InputMismatchException e){
+            choice = -1;
+            System.out.println("You have introduced a wrong value, please try again later. ");
+            sc.nextLine();
+        }
+
+        return choice;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,10 +122,11 @@ public class Util  {
         StringBuilder stringBuilder = new StringBuilder();
 
         set.forEach( (item) -> {
-            stringBuilder
-                    .append(sep1)
-                    .append(item.getName())
-                    .append(sep2);
+            if(item!=null)
+                stringBuilder
+                        .append(sep1)
+                        .append(item.getName())
+                        .append(sep2);
         });
         return stringBuilder;
     }
@@ -152,7 +156,7 @@ public class Util  {
             if(id.equals(""))
                 continue;
             CourseRepository courseRepository = CourseRepository.getInstance();
-            Course course = courseRepository.getObjectById(Integer.parseInt(id));
+            Course course = courseRepository.getCourseById(Integer.parseInt(id));
 
             setToBeReturned.add(course);
         }

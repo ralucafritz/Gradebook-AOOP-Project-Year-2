@@ -20,8 +20,8 @@ public class Group implements GetNameInterface {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private final int currentID;
-    private ArrayList<Student> studentsList = new ArrayList<Student>();
-    private ArrayList<Professor> professorsList = new ArrayList<Professor>();
+    private ArrayList<Student> studentsList = new ArrayList<>();
+    private ArrayList<Professor> professorsList = new ArrayList<>();
     private Set<Course> coursesList = new HashSet<>();
 
     // STATIC
@@ -33,12 +33,24 @@ public class Group implements GetNameInterface {
 
     /// EMPTY CONSTRUCTOR FOR A GROUP THAT ONLY HAS A NAME WITH NO STUDENTS / PROFESSORS / COURSES
     public Group() {
+        ArrayList<Group> listGroup = GroupRepository.getInstance().getGroupList();
+        for(Group group : listGroup) {
+            if(group.getName().equals(String.valueOf(ID))){
+                ID++;
+            }
+        }
         this.currentID = ID;
         ID ++;
     }
 
     // CONSTRUCTOR USED IN THE GENERATOR CLASS FOR GENERATING A SPECIFIC NUMBER OF STUDENTS AND ADDING THEM IN THE GROUP
     public Group( ArrayList<Student> students) {
+        ArrayList<Group> listGroup = GroupRepository.getInstance().getGroupList();
+        for(Group group : listGroup) {
+            if(group.getName().equals(String.valueOf(ID))){
+                ID++;
+            }
+        }
         this.studentsList = students;
         this.currentID = ID;
         ID ++;
@@ -58,9 +70,12 @@ public class Group implements GetNameInterface {
 
     public void addCourse(Course courseToBeAdded)  {
         try {
-            if (!coursesList.contains(courseToBeAdded)) {
+            Course thisCourse = getCourseEnrolled(courseToBeAdded);
+            // remove course from courses list
+            if(thisCourse==null) {
+                // add for group
                 this.coursesList.add(courseToBeAdded);
-                this.professorsList.add(courseToBeAdded.getProfessor());
+                // add for students in the group
                 for (Student student : studentsList) {
                     student.addCourse(courseToBeAdded);
                     student.updateDB();
@@ -75,26 +90,10 @@ public class Group implements GetNameInterface {
 
     public void removeCourse(Course courseToBeRemoved) {
         try {
-            if (coursesList.contains(courseToBeRemoved)) {
+            Course thisCourse = getCourseEnrolled(courseToBeRemoved);
                 // remove course from courses list
+            if(thisCourse!=null){
                 this.coursesList.remove(courseToBeRemoved);
-
-                // remove the professor if the professor doesn't teach something else
-                Professor professor = courseToBeRemoved.getProfessor();
-                professor.removeCourse(courseToBeRemoved);
-
-                boolean checkProfessorStatus = false;
-                for(Course course: coursesList) {
-                    // check if any other course has this professor
-                    if(course.getProfessor().getID()==professor.getID())
-                        checkProfessorStatus = true;
-                    // if the professor is found as a professor for another class, leave the for block
-                    if(checkProfessorStatus)
-                        continue;
-                }
-                // if the professor doesn't teach any other class, it gets removed from the professorsList of this group
-                if(!checkProfessorStatus)
-                    this.professorsList.remove(professor);
 
                 // remove course from the students of the group
                 for (Student student : studentsList) {
@@ -111,17 +110,35 @@ public class Group implements GetNameInterface {
 
     // ADD STUDENT
     public void addStudent(Student studentToBeAdded) {
-        if(!studentsList.contains(studentToBeAdded)) {
+        Student thisStudent = getStudentLearning(studentToBeAdded);
+        if(thisStudent==null){
             this.studentsList.add(studentToBeAdded);
+            this.getCoursesList().forEach(studentToBeAdded::addCourse);
         }
     }
 
     // REMOVE STUDENT
     public void removeStudent(Student studentToBeRemoved) {
-        if(studentsList.contains(studentToBeRemoved)) {
+        Student thisStudent = getStudentLearning(studentToBeRemoved);
+        if(thisStudent!=null){
             this.studentsList.remove(studentToBeRemoved);
         }
     }
+
+    public void addProfessor(Professor professorToBeAdded) {
+        Professor thisProfessor = getProfessorTeaching(professorToBeAdded);
+        if (thisProfessor == null) {
+            this.professorsList.add(professorToBeAdded);
+        }
+    }
+
+    public void removeProfessor(Professor professorToBeRemoved) {
+        Professor thisProfessor = getProfessorTeaching(professorToBeRemoved);
+        if(thisProfessor!=null) {
+            this.professorsList.remove(thisProfessor);
+        }
+    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// ACCESSORS ////////////////////////////////////////////////////////
@@ -142,6 +159,31 @@ public class Group implements GetNameInterface {
     public ArrayList<Professor> getProfessorsList() {
         return professorsList;
     }
+
+    public Professor getProfessorTeaching(Professor professor){
+        for (Professor professor1 : this.getProfessorsList()) {
+            if (professor1.getID()==professor.getID())
+                return professor1;
+        }
+        return null;
+    }
+
+    public Student getStudentLearning(Student student){
+        for (Student student1 : this.getStudentsList()) {
+            if (student1.getID()==student.getID())
+                return student1;
+        }
+        return null;
+    }
+
+    public Course getCourseEnrolled(Course course){
+        for (Course course1 : this.getCoursesList()) {
+            if (course1.getID()==course.getID())
+                return course1;
+        }
+        return null;
+    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// PRINTS ///////////////////////////////////////////////////////////
@@ -178,34 +220,47 @@ public class Group implements GetNameInterface {
     public <T extends GetNameInterface> String returnList(T object) {
         StringBuilder stringBuilder = new StringBuilder();
         if(object instanceof Course) {
-
-            CourseRepository courseRepository = CourseRepository.getInstance();
-           coursesList.forEach(course -> {
-                if (stringBuilder.length() != 0)
-                    stringBuilder.append(",");
-                stringBuilder
-                        .append(courseRepository.getIdByObject(course));
-           });
+            coursesList.forEach(course -> {
+                 if (course != null) {
+                     if (stringBuilder.length() != 0)
+                         stringBuilder.append(",");
+                     stringBuilder
+                             .append(CourseRepository.getInstance().getIdByCourse(course));
+                 }
+             });
         }
         else if(object instanceof Professor){
-
-            ProfessorRepository professorRepository= ProfessorRepository.getInstance();
             professorsList.forEach(professor -> {
-                if (stringBuilder.length() != 0)
-                    stringBuilder.append(",");
-                stringBuilder
-                        .append(professorRepository.getIdByObject(professor));
-            });
-        }else if(object instanceof Student) {
+                 if (professor != null) {
+                     if (stringBuilder.length() != 0)
+                         stringBuilder.append(",");
+                     stringBuilder
+                             .append(ProfessorRepository.getInstance().getIdByObject(professor));
+                 }
+             });
 
-            StudentRepository studentRepository = StudentRepository.getInstance();
-            studentsList.forEach(student -> {
-                if(stringBuilder.length() != 0)
-                    stringBuilder.append(",");
-                stringBuilder.append(studentRepository.getIdByObject(student));
+        }else if(object instanceof Student) {
+            this.studentsList.forEach(student -> {
+                if (student != null) {
+                    if (stringBuilder.length() != 0)
+                        stringBuilder.append(",");
+                    int idStudent = StudentRepository.getInstance().getIdByStudent(student);
+                    if (idStudent != -1)
+                        stringBuilder.append(idStudent);
+                }
             });
         }
         return stringBuilder.toString();
+    }
+
+    public boolean isProfessorStillTeaching(Professor professor) {
+        for(Professor professor1 : getProfessorsList()) {
+            for(Course course : professor1.getCourses()) {
+                if(getCourseEnrolled(course)!=null)
+                    return true;
+            }
+        }
+        return false;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
