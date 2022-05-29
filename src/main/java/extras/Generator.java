@@ -7,17 +7,20 @@ import clientSide.Group;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 public class Generator {
 
-    // this class was created for testing purposes in the initial phase when I needed to test different methods and
-    // menu options.
-    // at the moment nothing is used from this class.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// THIS CLASS WAS CREATED FOR TESTING PURPOSES IN THE INITIAL PHASE WHEN I NEEDED TO TEST DIFFERENT METHODS AND MENU OPTIONS. //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // AT THE MOMENT NOTHING IS USED FROM THIS CLASS.
 
+    // LIST THAT CONTAINS THE COURSE NAMES I SAVED FOR THE COURSE GENERATOR TO USE IN ORDER TO GENERATE COURSES
     private static final List<String> coursesNames = Arrays.asList(
             "Advanced Algorithms",
             "Advanced Object Orientated Programming",
@@ -29,10 +32,10 @@ public class Generator {
             "Statistics and Probabilities",
             "Databases");
 
-    // name generator from `names.txt` file that takes 2 random names from the file to create a realistic first and
-    // last name
+    // NAME GENERATOR FROM `NAMES.TXT` FILE THAT TAKES 2 RANDOM NAMES FROM THE FILE TO CREATE A REALISTIC FIRST AND
+    // LAST NAME
 
-    public static String nameGenerator() throws Exception {
+    public static String nameGenerator() {
         // the list of random names in names.txt are from
         // https://www.usna.edu/Users/cs/roche/courses/s15si335/proj1/files.php%3Ff=names.txt.html
 
@@ -41,11 +44,13 @@ public class Generator {
         String first = "";
         String last = "";
         try {
-            File namesFile = new File("names.txt");
-            Scanner scanner = new Scanner(namesFile);
+            File namesFile = new File( "names.txt");
+            Scanner sc = new Scanner(namesFile);
 
             Path path = namesFile.toPath();
-            long fileLen = Files.lines(path).count();
+            try {
+                long fileLen = Files.lines(path).count();
+
 
             // creating 2 random numbers for the first and last name
             randFirst = (int) (Math.random() * fileLen);
@@ -55,43 +60,45 @@ public class Generator {
             // we change the randLast number in order for the first and the last name to never be identical.
             if (randFirst == randLast && randLast > 0)
                 randLast--;
-            else
-                randLast++;
+            else if(randLast < 0)
+                    randLast++;
 
             // scan through the first randFirst-1 numbers and read the randFirst number name
-            for (int i = 0; i <= randFirst - 1; i++)
+            for (int i = 0; i <= randFirst; i++)
                 if(i != randFirst)
                 {
-                    scanner.nextLine();
+                    sc.nextLine();
                 }
                 else
                 {
-                    first = scanner.nextLine();
+                    first = sc.nextLine();
                 }
 
             // resetting scanner to the beginning of the file
-            scanner = new Scanner(namesFile);
+                sc = new Scanner(namesFile);
 
             // scan through the first randLast-1 numbers and read the randLast number name
-            for (int i = 0; i <= randLast - 1; i++)
+            for (int i = 0; i <= randLast; i++)
                 if(i != randLast)
                 {
-                    scanner.nextLine();
+                    sc.nextLine();
                 }
                 else
                 {
-                    last = scanner.nextLine();
+                    last = sc.nextLine();
                 }
-
-            scanner.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sc.close();
 
         } catch (FileNotFoundException e) {
-            throw new Exception("ERROR: Invalid File" + e);
+            e.printStackTrace();
         }
-
         return (first + " " + last);
     }
 
+    // DATE OF BIRTH GENERATOR
     public static String dateOfBirthGenerator(boolean isStudent) {
         // to be technically correct we will choose a day between 1 and 27
         int day =  Util.getRandomNumber(27,1);
@@ -125,14 +132,17 @@ public class Generator {
         return dayToString + "-" + monthString + "-" + year;
     }
 
-    public static Student studentGenerator() throws Exception {
+    // STUDENT GENERATOR
+    public static Student studentGenerator(){
         return new Student(nameGenerator(),randomGenderGenerator(), dateOfBirthGenerator(true));
     }
 
-    public static Professor professorGenerator() throws Exception {
+    // PROFESSOR GFNERATOR
+    public static Professor professorGenerator()   {
         return new Professor(nameGenerator(), randomGenderGenerator(), dateOfBirthGenerator(false));
     }
 
+    // RANGOM GENER GENERATOR
     public static Gender randomGenderGenerator() {
         return Gender.values()
                 [
@@ -140,7 +150,8 @@ public class Generator {
                 ];
     }
 
-    public static Group groupGenerator(int numberStudents) throws Exception {
+    // GROUP GENERATOR WITH A GIVEN NUMBER OF STUDENTS TO GENERATE AUTOMATICALLY
+    public static Group groupGenerator(int numberStudents) {
 
         ArrayList<Student> studentsList =  new ArrayList<Student>();
         for (int i = 0; i < numberStudents; i++) {
@@ -150,11 +161,10 @@ public class Generator {
         return new Group(studentsList);
     }
 
-    public static Course courseGenerator() throws Exception {
-        int randCredits = Util.getRandomNumber(5,1);
+    // COURSE GENERATOR
+    public static Course courseGenerator(Professor professor) {
         int randIndex = Util.getRandomNumber(coursesNames.size() - 1, 0);
         String name = coursesNames.get(randIndex);
-        Professor professor = professorGenerator();
 
         return new Course(name, true, professor);
     }
