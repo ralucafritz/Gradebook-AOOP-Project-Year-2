@@ -5,8 +5,21 @@ import extras.Util;
 import services.config.DatabaseConfiguration;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ProfessorRepository {
+
+    public static ProfessorRepository instance;
+
+    private ProfessorRepository() {}
+
+    public static ProfessorRepository getInstance() {
+        if(instance == null)
+            instance = new ProfessorRepository();
+        return instance;
+    }
+
+    private CourseRepository courseRepository;
 
     public void createTable() {
         String createTableSql = "CREATE TABLE IF NOT EXISTS professor " +
@@ -14,7 +27,9 @@ public class ProfessorRepository {
                     "professorId int PRIMARY KEY AUTO_INCREMENT, " +
                     "name varchar(40), " +
                     "gender varchar(1), " +
-                    "dateOfBirth " +
+                    "dateOfBirth Date," +
+                    "coursesList varchar(1000)," +
+                    "currentId int UNIQUE" +
                 ")";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
@@ -30,14 +45,17 @@ public class ProfessorRepository {
     // CREATE
     public void addProfessor(Professor professor) {
 
-        String insertProfessorSql = "INSERT INTO professor(name, gender, dateOfBirth) VALUES(?, ?, ?)";
+        String insertProfessorSql = "INSERT INTO professor(name, gender, dateOfBirth, coursesList, currentId) VALUES(?, ?, ?, ?, ?)";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertProfessorSql)) {
             preparedStatement.setString(1, professor.getName());
             preparedStatement.setString(2, professor.getGender());
-            preparedStatement.setDate(3, java.sql.Date.valueOf(professor.getDateOfBirth()));
+            Date date = java.sql.Date.valueOf(professor.getDateOfBirth());
+            preparedStatement.setDate(3, date);
+            preparedStatement.setString(4, "");
+            preparedStatement.setInt(5, professor.getID());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -46,56 +64,71 @@ public class ProfessorRepository {
     }
 
     // GET / READ
-    public Professor getProfessorById(int id) throws Exception {
+    public Professor getProfessorById(int id)   {
 
-        String selectSQL = "SELECT * FROM professor WHERE  id =?";
+        String selectProfessorSql = "SELECT * FROM professor WHERE  professorId =?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectProfessorSql)) {
             preparedStatement.setInt(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            return mapToProfessor(resultSet);
-
+            if(resultSet.next()) {
+                Professor professorToReturn =  mapToProfessor(resultSet);
+                if (professorToReturn != null) {
+                    return professorToReturn;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    // DELETE
-    public void deleteProfessorById(int id)  {
-        String deleteSql = "DELETE FROM professor WHERE id=?";
+    public int getIdByObject(Professor professor)   {
+        String getIdByProfessorSQL = "SELECT * FROM professor WHERE currentId=?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteSql)) {
-            preparedStatement.setInt(1, id);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getIdByProfessorSQL)) {
+            preparedStatement.setInt(1, professor.getID());
 
-            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next())
+                return resultSet.getInt(1);
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        DatabaseConfiguration.closeDatabaseConnection();
+        return -1;
+    }
+
+    // DELETE
+    public void deleteProfessorById(int id)   {
+        UtilRepository.deleteObjectById(id, "professor", "professorId");
     }
 
     // READ ALL
     public void displayProfessors() {
-        String selectSql = "SELECT * FROM professor";
+        String displayProfessorsSQL = "SELECT * FROM professor";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (Statement stmt = connection.createStatement()) {
             //try with resources
-            ResultSet resultSet = stmt.executeQuery(selectSql);
+            ResultSet resultSet = stmt.executeQuery(displayProfessorsSQL);
 
             while (resultSet.next()) {
-                Professor professor = new Professor(resultSet.getString(2), resultSet.getString(3), Util.dateToString(resultSet.getDate(4), false));
+                Professor professor = mapToProfessor(resultSet);
+
                 if(professor!= null) {
-                    System.out.println("Professorul #ID " + resultSet.getString(1) + ":");
+                    System.out.println("Professorul #ID " +
+                            resultSet.getString(1) + ":");
                     professor.accountInfo();
                 }
             }
@@ -106,16 +139,26 @@ public class ProfessorRepository {
         }
     }
 
-    public void updateProfessor(String name, String gender, String dateOfBirth, int id) {
-        String updateProfessorSql = "UPDATE professor SET name=? AND gender=? AND dateOfBirth=? WHERE id=?";
+    public void updateProfessor(Professor professor, int id) {
+        String updateProfessorSql = "UPDATE professor " +
+                "SET " +
+                    "name=?, " +
+                    "gender=?,  " +
+                    "dateOfBirth=?,  " +
+                    "coursesList=?," +
+                    "currentId=? " +
+                "WHERE " +
+                    "professorId=?";
 
         Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateProfessorSql)) {
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, gender);
-            preparedStatement.setDate(3, java.sql.Date.valueOf(Util.reverseYearAndDay(dateOfBirth, true)));
-            preparedStatement.setInt(4, id);
+            preparedStatement.setString(1, professor.getName());
+            preparedStatement.setString(2, professor.getGender());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(Util.reverseYearAndDay(professor.getDateOfBirth(), true)));
+            preparedStatement.setString(4, professor.returnCoursesList());
+            preparedStatement.setInt(5, professor.getID());
+            preparedStatement.setInt(6,id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -123,12 +166,46 @@ public class ProfessorRepository {
         }
     }
 
+    public ArrayList<Professor> getProfessorsList() {
+        String selectProfessorsSQL = "SELECT * FROM professor";
+
+        Connection connection = DatabaseConfiguration.getDatabaseConnection();
+        ArrayList<Professor> professorsList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) { //try with resources
+
+            ResultSet resultSet = stmt.executeQuery(selectProfessorsSQL);
+
+            while(resultSet.next()) {
+
+                Professor professor = mapToProfessor(resultSet);
+
+                if (professor != null){
+                    System.out.println("Professor ID # " + resultSet.getString(1) + "loaded");
+                    professorsList.add(professor);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return professorsList;
+    }
+
     // private methods
 
-    private Professor mapToProfessor(ResultSet resultSet) throws SQLException, Exception {
-        if(resultSet.next()) {
-            return new Professor(resultSet.getString(2), resultSet.getString(3), Util.dateToString(resultSet.getDate(4), false));
+    private Professor mapToProfessor(ResultSet resultSet) {
+        try {
+            return new Professor(
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    Util.dateToString(resultSet.getDate(4), false),
+                    resultSet.getString(5),
+                    resultSet.getInt(6));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
+
 }

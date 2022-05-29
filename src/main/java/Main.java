@@ -1,19 +1,44 @@
 import services.Menu;
+import services.config.DatabaseConfiguration;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//
-        Menu menu = new Menu();
-        menu.printMenuOptions();
+////
+        Menu.getInstance().printMenuOptions();
 
-//        Student student = new Student("Ana", Gender.F, "1-1-1998");
-//
+        DatabaseConfiguration.closeDatabaseConnection();
+
 //        StudentRepository studentRepository = new StudentRepository();
+//        GroupRepository groupRepository = new GroupRepository();
+//        ProfessorRepository professorRepository = new ProfessorRepository();
+//        CourseRepository courseRepository = new CourseRepository();
+
 //        studentRepository.createTable();
-//        studentRepository.addStudent(student);
-//        Student student2 = studentRepository.getStudentById(1);
-//        studentRepository.dis
+//        groupRepository.createTable();
+//        professorRepository.createTable();
+//        courseRepository.createTable();
+//
+//        for(int i=0; i<=60; i++)
+//        {
+//            Student student = Generator.studentGenerator();
+//            studentRepository.addStudent(student);
+//        }
+//
+//        for(int i=0;i<=3;i++)
+//        {
+//            Group group = new Group();
+//            groupRepository.addGroup(group);
+//        }
+//
+//        Professor professor = Generator.professorGenerator();
+//
+//        professorRepository.addProfessor(professor);
+//        Course course = Generator.courseGenerator(professor);
+//
+//        professor.addCourse(course);
+//        professorRepository.updateProfessor(professor, professor.getID());
+//        courseRepository.addCourse(course);
 
     }
 }

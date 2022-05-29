@@ -5,9 +5,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CsvReports {
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// THIS CLASS's PURPOSE IS TO WRITE AND READ CSV REPORTS ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     private static String getFilePath(String nameFile) {
         return "E:\\repos\\aoop-project\\src\\main\\java\\Services\\reports\\" + nameFile + ".csv";
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// CREATE REPORT FILE ////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static boolean createReport(String column1, String column2, String nameFile){
         try {
@@ -28,27 +38,11 @@ public class CsvReports {
         }
     return true;
     }
-//
-//    public static void writeGradesToReport(Student student, Course course, String nameFile){
-////
-////         int grade = student.getGrade(course);
-////
-////         if(option == GradesOptions.NOT_MARKED && grade == 0) {
-////             nameFile += "ReportsStudentsNotMarked";
-////         }
-////         else if(option == GradesOptions.PASSED && grade > 5) {
-////             nameFile += "ReportsPassedStudents";
-////         }
-////         else if(option == GradesOptions.FAILED && grade < 5 && grade > 0) {
-////             nameFile += "ReportsFailedStudents";
-////         }
-////         else {
-////              return;
-////         }
-//
-//        writeToReport(student.getName(), course.getName(), nameFile);
-//
-//    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// WRITE TO REPORT /////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void writeToReportWithHeader(String column1, String column2, String nameFile, boolean isHeader) {
         String filePath = getFilePath(nameFile);
@@ -100,5 +94,34 @@ public class CsvReports {
             ex.printStackTrace();
         }
     }
+
+    public static void endOfReport(String nameFile) {
+        writeToReport("========","========", nameFile);
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// EXTRA COMMENTED OUT CODE //////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void writeGradesToReport(Student student, Course course, String nameFile){
+////
+////         int grade = student.getGrade(course);
+////
+////         if(option == GradesOptions.NOT_MARKED && grade == 0) {
+////             nameFile += "ReportsStudentsNotMarked";
+////         }
+////         else if(option == GradesOptions.PASSED && grade > 5) {
+////             nameFile += "ReportsPassedStudents";
+////         }
+////         else if(option == GradesOptions.FAILED && grade < 5 && grade > 0) {
+////             nameFile += "ReportsFailedStudents";
+////         }
+////         else {
+////              return;
+////         }
+//
+//        writeToReport(student.getName(), course.getName(), nameFile);
+//
+//    }
 
 }

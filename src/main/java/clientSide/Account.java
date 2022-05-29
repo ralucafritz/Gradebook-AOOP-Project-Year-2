@@ -10,55 +10,87 @@ import java.util.Calendar;
 
 public abstract class Account implements GetNameInterface, SetAccountInterface {
 
-    // instances fields
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////// THIS ABSTRACT CLASS IS MEANT TO BECOME A SORT OF TEMPLATE FOR THE CLASSES PROFESSOR AND STUDENT ///////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // instances fields
     private String name;
     private Gender gender;
     private Calendar dateOfBirth;
 
-    // constructors
+    // currentID only used for load data data from the database
+    private int currentID;
 
-    public Account() throws Exception {
+    // ID creates an ID for each object it's created
+    private static int ID=1;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////// CONSTRUCTORS ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // THE CONSTRUCTORS IN THE ACCOUNT ABSTRACT CLASS ARE ONLY MEANT FOR THE INHERITANCE OF THE CLASSES
+    // STUDENT & PROFESSORS
+
+    /// EMPTY CONSTRUCTOR FOR AN ACCOUNT
+    public Account() {
         this(null, Gender.Unknown, "01-01-1960");
+        this.currentID = ID;
+        ID ++;
     }
 
-    public Account(String name, String dateOfBirth) throws Exception {
+    public Account(String name, String dateOfBirth)  {
         this(name, Gender.Unknown, dateOfBirth);
+
+        this.currentID = ID;
+        ID ++;
     }
 
-    public Account(String name, Gender gender, String dateOfBirth) throws Exception {
+    public Account(String name, Gender gender, String dateOfBirth)  {
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
+        this.currentID = ID;
+        ID ++;
     }
 
-    public Account(String name, String gender, String dateOfBirth) throws Exception {
+    public Account(String name, String gender, String dateOfBirth)  {
         this.name = name;
         this.gender = Util.genderStringValidation(gender);
-
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
+        this.currentID = ID;
+        ID ++;
     }
 
-    public Account(String name, String gender, Date  dateOfBirth) throws Exception {
+    public Account(String name, String gender, Date  dateOfBirth)  {
         this(name, gender, Util.dateToString(dateOfBirth, false));
-
+        this.currentID = ID;
+        ID ++;
     }
 
-    // mutators
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// MUTATORS //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setGender(String gender) throws Exception {
+    public void setGender(String gender)  {
         this.gender = Util.genderStringValidation(gender);
     }
 
-    public void setDateOfBirth(String dateOfBirth) throws Exception {
+    public void setDateOfBirth(String dateOfBirth)  {
         this.dateOfBirth = Util.stringToDate(dateOfBirth);
     }
 
-    // accessors
+    public void setCurrentID(int currentID) {
+        this.currentID = currentID;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// ACCESSORS ////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getName() {
         return name;
@@ -69,6 +101,10 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
             return "M";
         else
             return "F";
+    }
+
+    public int getID() {
+        return ID;
     }
 
     public int getAge() {
@@ -93,17 +129,21 @@ public abstract class Account implements GetNameInterface, SetAccountInterface {
         return year + "-" + month + "-" + day;
     }
 
-    // extra methods:
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// EXTRA METHODS /////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void accountInfo() {
-        System.out.println("Name: " + this.name + "\n" +
-                "Gender: " + getGender() + "\n" +
-                "Age: " + this.getAge());
+        System.out.println("\t Name: " + this.name + "\n" +
+                "\t Gender: " + getGender() + "\n" +
+                "\t Age: " + this.getAge());
     }
 
     public int compareTo(Account ac) {
         return this.name.compareTo(ac.name);
     }
+
+
 
 }
 
