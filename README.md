@@ -5,7 +5,7 @@
 The main focus of this project is the creation and usage of a `console-app` gradebook that keeps track of the grades given by professors in a local database.
 
 ## Table of Contents
-[1. REQUIREMENTS](#requirements)
+[1. REQUIREMENTS](#1-requirements)
 
 [2. PROJECT STRUCTURE](#project-structure)
 
