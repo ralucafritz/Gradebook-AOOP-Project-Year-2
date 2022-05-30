@@ -9,9 +9,9 @@ The main focus of this project is the creation and usage of a `console-app` grad
 
 [2. PROJECT STRUCTURE](#2-project-structure)
 
-[3. DATABASE IMPLEMENTATION](#database-implementation)
+[3. DATABASE IMPLEMENTATION](#3-database-implementation)
 
-[4. EXAMPLE CODE SNIPPLETS AND IMAGES](#code-snippets-and-images)  
+[4. EXAMPLE CODE SNIPPLETS AND IMAGES](#3-database-implementation)  
 <sub>*Update with code snippets and DB screenshots coming soon<sup>TM</sup>*</sub>
 
 ## [1. REQUIREMENTS](#requirements)
