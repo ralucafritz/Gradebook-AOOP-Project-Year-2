@@ -69,41 +69,42 @@ Main classes:
 - `Account` = abstract class used as template for the `Student` and `Professor` classes
 - `Student` = extends the class Account 
 - `Professor` = extends the class Acount
-- `Group` - Because in Romania we are divided groups of 20-30 students in order to attend laboratories or seminars, I used it as a template for this `Grade Book`
+- `Group` 
+   Because in Romania we are divided groups of 20-30 students in order to attend laboratories or seminars, I used it as a template for this `Grade Book`
 
 - `Course` 
 
-  Special connection between the main clases:
-  - a Student is part of a group
-  - a Group is enrolled in a Course
-  - a Professor is teaching a course and by association, the group that is enrolled in that course
-  - classes attended by Students, tought by Professors
+  Special connection between the main clases:  
+  - a Student is part of a group  
+  - a Group is enrolled in a Course  
+  - a Professor is teaching a course and by association, the group that is enrolled in that course  
+  - classes attended by Students, tought by Professors  
 
 Extra classes:
 
-- `Interfaces`
-  - `GetNameInterface`
-  - `SetAccountInterface`
- Both of the interfaces lack in methods but their main goal was to help with the creation of generic methods in order to reduce the chance of duplicated code
+- `Interfaces`  
+  - `GetNameInterface`  
+  - `SetAccountInterface`  
+  - Both of the interfaces lack in methods but their main goal was to help with    the creation of generic methods in order to reduce the chance of duplicated    code  
 
-- `Gender`
-  Enum class used for the gender of a person(`M`,`F`,`UNKNOWN`) - lacks in the overall possible choices
-- `GradesOptions`
+- `Gender`  
+    Enum class used for the gender of a person(`M`,`F`,`UNKNOWN`) - lacks in  the overall possible choices
+- `GradesOptions`  
   Enum class used for the grades status(`PASSED`,`FAILED`,`NOT GRADED`)
-- `Generator`
+- `Generator`  
   This class was made solely for the purpose of generating different objects: students, professors, groups, courses, dates of birth, names, retrieve a random gender. This class was used mainly in the early stage of the project when pre-made data was needed to test different methods. 
-- `Util` 
+- `Util`   
   This class is used for most of the useful methods used across the project in order to optimize different aspects or to reduce the risk of duplicated code ++ methods for data validation and data formatting.
-- `CsvReports`
+- `CsvReports`  
   Used for the creation of `.csv` files and the read/write process of the reports
-- `Repositories`
-  - `StudentRepository`
-  - `ProfessorRepository`
-  - `CourseRepository`
-  - `GroupRepository`
-  - `UtilRepository` - the `Util` class's version of the `Repositories`
-   Singleton classes used mainly for the connection between the Database and the local data with CRUD operations
-- `Menu`
+- `Repositories`  
+  - `StudentRepository`  
+  - `ProfessorRepository`  
+  - `CourseRepository`  
+  - `GroupRepository`  
+  - `UtilRepository`  - the `Util` class's version of the `Repositories`  
+  - Singleton classes used mainly for the connection between the Database and the local data with CRUD operations
+- `Menu`  
   A singleton class that holds most of the information while the application runs. It is also the place where the data from the DB is being loaded into, the data is loaded into specific lists. 
   This class went through multiple changes along the stages.
 
