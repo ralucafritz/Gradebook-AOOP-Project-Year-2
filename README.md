@@ -49,7 +49,7 @@ The stage two version is at [this location](https://github.com/ralucafritz/aoop-
 
 #### [STAGE THREE](#stage-three)
 
-All the `CRUD` operations` from [STAGE ONE](#stage-one) shall be made on objects found in the DATABASE.
+All the `CRUD operations` from [STAGE ONE](#stage-one) shall be made on objects found in the DATABASE.
 
 The stage three version is also the last version, available at [this location](https://github.com/ralucafritz/aoop-project).
 
