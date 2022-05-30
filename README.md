@@ -20,7 +20,7 @@ The projects requirements were devided into three stages:
 
 #### [STAGE ONE](#stage-one)
     
-Long story short, we neded to have a few classes saved in the local memory that will be used in a console menu with the purpose of achieving different scenarios while using the `CRUD operations` (`CREATE`, `RETRIEVE`, `UPDATE`, `DELETE`).
+Long story short, we needed to have a few classes saved in the local memory that will be used in a console menu with the purpose of achieving different scenarios while using the `CRUD operations` (`CREATE`, `RETRIEVE`, `UPDATE`, `DELETE`).
 
 While working on the project we had to keep in mind and use different elements or concepts:
 
@@ -51,7 +51,7 @@ The stage three version is also the last version, available at [this location](h
 
 
 
-## [2. PROJECT STRUCTURE](#project-structure)
+## [2. PROJECT STRUCTURE](#2-project-structure)
 
 When I started working on this project I have tried building a UML diagram that can be found at [this location](aoop-project.xml).  
 The structure of the project went through multiple changes since the initial plan, but for the first 2 stages I have used the [todolist.md](todolist.md) file in order to keep track of the different concepts and ideas I wanted to implement. 
@@ -138,14 +138,14 @@ Extra classes:
   -  return all the students without grades
   -  previous menu
 
-## [3. DATABASE IMPLEMENTATION](#database-implementation)
+## [3. DATABASE IMPLEMENTATION](#3-database-implementation)
 
 In the last stage I had to do a lot of changes and adapt to different situations because I have realised that the plan and structure I had set up were not 100% compatible with the way a database is implemented. 
 
-More on this can be found at the bottome of the `README.md` file in a [note](#note).
+More on this can be found at the bottome of the `README.md` file in a note.
 
 
-## [4. EXAMPLE CODE SNIPPLETS AND IMAGES](#code-snippets-and-images)
+## [4. EXAMPLE CODE SNIPPLETS AND IMAGES](#4-example-code-snipplets-and-images))
 <sub>*Update with code snippets and DB screenshots coming soon<sup>TM</sup>*</sub>
 
 
@@ -153,7 +153,7 @@ More on this can be found at the bottome of the `README.md` file in a [note](#no
 
 ---
 
-*[NOTE:](#note) Because of some initial planning issues with the classes and relations between them, I had to improvise when implementing the database, more details at [repository\README.md](https://github.com/ralucafritz/aoop-project/blob/main/src/main/java/repositories/README.md)*
+*NOTE: Because of some initial planning issues with the classes and relations between them, I had to improvise when implementing the database, more details at [repository\README.md](https://github.com/ralucafritz/aoop-project/blob/main/src/main/java/repositories/README.md)*
 
 <!-- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
  -->
