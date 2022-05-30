@@ -7,7 +7,7 @@ The main focus of this project is the creation and usage of a `console-app` grad
 ## Table of Contents
 [1. REQUIREMENTS](#1-requirements)
 
-[2. PROJECT STRUCTURE](#project-structure)
+[2. PROJECT STRUCTURE](#2-project-structure)
 
 [3. DATABASE IMPLEMENTATION](#database-implementation)
 
