@@ -1,5 +1,6 @@
 # Grade Book
 <sub>Advanced Object Orientated Programming Project</sub>
+<sub>Fritz Raluca-Mihaela</sub>
 
 The main focus of this project is the creation and usage of a `console-app` gradebook that keeps track of the grades given by professors in a local database.
 
