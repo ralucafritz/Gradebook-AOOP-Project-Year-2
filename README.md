@@ -28,16 +28,16 @@ Long story short, we neded to have a few classes saved in the local memory that 
 
 While working on the project we had to keep in mind and use different elements or concepts:
 
-[x] polymorphism   
-[x] arrays   
-[x] sorting   
-[x] java 8+ elements   
-[x] abstract classes   
-[x] interfaces   
-[x] excetions and collections + lambda expressions   
-[x] comparators  
-[x] files reading / writing   
-[x] generic methods  
+- [x] polymorphism   
+- [x] arrays   
+- [x] sorting   
+- [x] java 8+ elements   
+- [x] abstract classes   
+- [x] interfaces   
+- [x] excetions and collections + lambda expressions   
+- [x] comparators  
+- [x] files reading / writing   
+- [x] generic methods  
 
 The stage one version is at [this location](https://github.com/ralucafritz/aoop-project/tree/b9507660804292f38c785dca7a83d2db31ff4737) and after a few days I discovered a small bug in the menu of the application because of some issues with `scanner.next()` and `scanner.nextInt` that needed a `scanner.nextLine()` in order for the next read with the help of a scanner to be preformed properly, which was fixed at [this location](https://github.com/ralucafritz/aoop-project/tree/e740b064ba55a2e4c797b670a7d2db6d52d6fb7e).
 
