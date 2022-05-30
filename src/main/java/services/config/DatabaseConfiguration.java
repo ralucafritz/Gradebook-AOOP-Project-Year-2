@@ -11,6 +11,7 @@ public class DatabaseConfiguration {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/aoop-project";
     private static final String USER = "root";
     private static final String PASSWORD = "AObOlqhO7Q8yWhir8dCe";
+
     private static Connection databaseConnection;
 
     private DatabaseConfiguration() {
