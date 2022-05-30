@@ -153,6 +153,8 @@ More on this can be found at the bottome of the `README.md` file in a [note](#no
 
 <sub>**KNOWN BUG** - found in the stage three: it was intended that when a course is added, it can only be added to only one group, therefore when it gets deleted, the professor should be checked if he also teaches other courses to the current group when deleting the course, in order to not have a possible error afterwards. Tried fixing this issue, but my solution involved multiple `for` blocks or lamdba expressions that would in the end give a `ConcurrentModificationException`</sub>
 
+---
+
 *[NOTE:](#note) Because of some initial planning issues with the classes and relations between them, I had to improvise when implementing the database, more details at [repository\README.md](https://github.com/ralucafritz/aoop-project/blob/main/src/main/java/repositories/README.md)*
 
 <!-- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
