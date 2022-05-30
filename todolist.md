@@ -10,23 +10,20 @@ Clase actuale:
 
 - [x] Student extends Account
     - [x] Map<Course, Integer> courses -- courses and grades
-    <!-- - [x] Group -->
 
 - [x] Profesor extends Account
-    <!-- - [x] List / Array / Colectie <Group> -->
     - [x] List / Array / Colectie<Course
     - [x] method mark(Student, Course, nota)
 
 - [x] Course
     - [x]  name
-    - [ ]  credits -> etapa 2
     - [x]  professor
 
 - [x] Group
     - [x]  name / identifier
     - [x]  List / array / colectie Student
     - [x]  List / array / colectie Profesor
-    - [ ]  List / array / colectie Courses
+    - [x]  Set Courses
 
 - [x] static Util
     - [x]  arraylistToString
@@ -53,12 +50,6 @@ Clase actuale:
     - [x] setGender()
     - [x] setDateOfBirth()
 
-- [ ] TBD if scripts -> etapa 2
-    - [ ] fisier pentru studenti
-    - [ ] fisier pentru profesori
-    - [ ] fisier pentru grupe
-    - [ ] fisier pentru materii
-
 - [x] class Meniu
     - [x] print meniu principal
     - [x] optiuni meniu principal
@@ -83,7 +74,7 @@ Clase actuale:
             - [x] student
                 - [x] print materii 
                 - [x] print materii si note
-                - [ ] print nr grupei
+                - [x] print nr grupei
                 - [x] print grupa si colegi
                 - [x] print failed classes
                 - [x] go to previous menu
@@ -91,8 +82,6 @@ Clase actuale:
                 - [x] mark note
                 - [x] print materii la care preda
                 - [x] print grupe la care preda
-                - [ ] print studentii unei grupe (? daca sa mai implementez)
-                - [ ] print notele unui student (? daca sa mai implementez)
                 - [x] go to previous menu
 
 Lista undeva in cod cu nume de materii -> generator
@@ -101,21 +90,12 @@ Lista undeva in cod cu nume de materii -> generator
    - [x]  enter number of students:
         30
     for loop 0 30 face 30 de studenti
-    
 - [x]  Create materii
-
 - [x] Create profs
-    - [ ] number of profs
-        la fiecare prof creat se asigneaza o materie random
-
 - [x] asign materie to grupa 
-
- 
 - [x] la mark note la prof
     - [x] mark(student, materie, nota)
         - [x] verificare ca proful preda studentului
-
-
 
 ETAPA 2:
 Raporturi in fisiere de tip '.csv':
@@ -127,5 +107,5 @@ Raporturi in fisiere de tip '.csv':
 - [x] students with courses not graded
 
 ETAPA 3:
-setup MYSQL as DB
-- CRUD = create read update delete
+- [x] setup MYSQL as DB 
+- CRUD = create retrieve update delete
