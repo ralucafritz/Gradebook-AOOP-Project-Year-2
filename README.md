@@ -24,7 +24,7 @@ The projects requirements were devided into three stages:
 
 #### [STAGE ONE](#stage-one)
     
-Long story short, we neded to have a few classes saved in the local memory that will be used in a console menu with the purpose of achieving different scenarios while using the CRUD operations (CREATE, RETRIEVE, UPDATE, DELETE).
+Long story short, we neded to have a few classes saved in the local memory that will be used in a console menu with the purpose of achieving different scenarios while using the `CRUD operations` (`CREATE`, `RETRIEVE`, `UPDATE`, `DELETE`).
 
 While working on the project we had to keep in mind and use different elements or concepts:
 
@@ -49,7 +49,7 @@ The stage two version is at [this location](https://github.com/ralucafritz/aoop-
 
 #### [STAGE THREE](#stage-three)
 
-All the CRUD operations from [STAGE ONE](#stage-one) shall be made on objects found in the DATABASE.
+All the `CRUD` operations` from [STAGE ONE](#stage-one) shall be made on objects found in the DATABASE.
 
 The stage three version is also the last version, available at [this location](https://github.com/ralucafritz/aoop-project).
 
