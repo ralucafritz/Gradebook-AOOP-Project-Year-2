@@ -103,6 +103,8 @@ Extra classes:
 - `Menu`  
   A singleton class that holds most of the information while the application runs. It is also the place where the data from the DB is being loaded into, the data is loaded into specific lists. 
   This class went through multiple changes along the stages.
+- `DatabaseConfiguration`
+  With the sole purpose of establishing the connection with the DB, even though, in this project the data is not *secret*, this resulting in the usage of bad practices.
 
 #### MENUS
 
