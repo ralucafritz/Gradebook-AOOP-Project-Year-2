@@ -25,7 +25,6 @@ public class Menu {
 
     private static Menu instance;
     private final Scanner sc;
-    private boolean init;
 
     private ArrayList<Student> studentsList;
     private ArrayList<Professor> professorsList;
@@ -35,7 +34,6 @@ public class Menu {
     private Menu(){
         databaseInit();
         sc = new Scanner(System.in);
-        init = false;
         reportsFilesInit();
     }
 

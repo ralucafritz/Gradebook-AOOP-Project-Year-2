@@ -51,9 +51,12 @@ public class MenuOptions {
                 "\t \t \t \t Welcome to the Reports Menu! \n" +
                 "\t You have the following options:\n" +
                 "\t \t 1. Return the professors names for a specific group,\n" +
-                "\t \t 2. Return the group that are enrolled in a specific course[only a group at a time can study a specific course],\n" +
-                "\t \t 3. Return all the students that passed a course and the name of the course (if the course has already been graded),\n" +
-                "\t \t 4. Return all the students that failed a course and the name of the course (if the course has already been graded),\n" +
+                "\t \t 2. Return the group that are enrolled in a specific course" +
+                                    "[only a group at a time can study a specific course],\n" +
+                "\t \t 3. Return all the students that passed a course and the name of the course " +
+                                    "(if the course has already been graded),\n" +
+                "\t \t 4. Return all the students that failed a course and the name of the course " +
+                                    "(if the course has already been graded),\n" +
                 "\t \t 5. Return all the students enrolled in a specific course,\n" +
                 "\t \t 6. Return all the students without grades, \n" +
                 "\t \t 7. Go to the previous menu.\n");

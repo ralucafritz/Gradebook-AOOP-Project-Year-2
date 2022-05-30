@@ -69,6 +69,7 @@ public class CsvReports {
 
         bufferedWriter.append("\n");
 
+        bufferedWriter.close();
         System.out.println("Report successful.\n");
 
         } catch (IOException e) {
@@ -88,11 +89,11 @@ public class CsvReports {
 
             while((report = bufferedReader.readLine()) != null) {
                 String [] reportData = report.split(",");
-                System.out.println("\t" + reportData[0] + " \t " + reportData[1] + "\t" + reportData[2]);
+                System.out.println("\t\t\t\t" + reportData[0] + " \t\t\t\t " + reportData[1] + "\t\t\t\t" + reportData[2]);
 
             }
             System.out.println("\n");
-
+            bufferedReader.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
